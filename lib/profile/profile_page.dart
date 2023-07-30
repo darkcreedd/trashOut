@@ -1,18 +1,28 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icofont_flutter/icofont_flutter.dart';
-import 'package:trash_out/firebase_authentication.dart';
+import 'package:trash_out/state/auth.dart';
+import 'package:trash_out/state/firebase_authentication.dart';
+import 'package:trash_out/state/user_state.dart';
 import 'package:trash_out/utils/colors.dart';
 import 'package:trash_out/widgets/gap.dart';
 import 'package:trash_out/widgets/profile_tab.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({super.key});
 
   @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends ConsumerState<ProfilePage> {
+  @override
   Widget build(BuildContext context) {
     var mediaQ = MediaQuery.sizeOf(context);
+    final user = ref.watch(userDetailsNotifierProvider);
 
     return Scaffold(
       backgroundColor: Colors.grey[200],
@@ -38,7 +48,9 @@ class ProfilePage extends StatelessWidget {
                     radius: 35.r,
                   ),
                   Gap(10.h),
-                  Text(Authentication().auth.currentUser!.email!),
+                  // Text(user.email),
+                  Text(FirebaseAuth.instance.currentUser!.displayName!),
+
                   const Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -176,8 +188,8 @@ class ProfilePage extends StatelessWidget {
                                 actions: [
                                   TextButton(
                                     onPressed: () {
-                                      Authentication().signOut();
-                                      context.go('/signIn');
+                                      FirebaseAuthService().signOut().then(
+                                          (value) => context.go('/signIn'));
                                     },
                                     child: const Text(
                                       "Leave",

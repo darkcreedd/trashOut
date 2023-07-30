@@ -23,7 +23,7 @@ class _CustomPasswordFieldState extends State<CustomPasswordField> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 50.h,
-      child: TextField(
+      child: TextFormField(
         obscureText: obscureText,
         controller: widget.controller,
         cursorColor: KColors.green300,
@@ -52,6 +52,10 @@ class _CustomPasswordFieldState extends State<CustomPasswordField> {
           ),
           fillColor: Colors.grey[100],
           filled: true,
+          errorBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.red),
+            borderRadius: BorderRadius.circular(10.r),
+          ),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.grey.shade400),
             borderRadius: BorderRadius.circular(10.r),

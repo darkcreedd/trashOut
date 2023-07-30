@@ -5,7 +5,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 
 import 'package:trash_out/utils/colors.dart';
 import 'package:trash_out/widgets/custom_button.dart';
-import 'package:trash_out/widgets/custom_text_field.dart';
+import 'package:trash_out/widgets/custom_email_field.dart';
 import 'package:trash_out/widgets/gap.dart';
 
 class ForgotPasswordPage extends StatelessWidget {
@@ -42,7 +42,7 @@ class ForgotPasswordPage extends StatelessWidget {
                     fontSize: 13.sp),
               ),
               Gap(25.h),
-              CustomTextField(
+              CustomEmailField(
                 icon: MdiIcons.email,
                 label: "Email",
               ),

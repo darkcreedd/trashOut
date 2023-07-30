@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trash_out/utils/colors.dart';
 
-class CustomTextField extends StatelessWidget {
-  const CustomTextField({
+class CustomEmailField extends StatefulWidget {
+  const CustomEmailField({
     Key? key,
     required this.icon,
     required this.label,
@@ -15,16 +15,35 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
 
   @override
+  State<CustomEmailField> createState() => _CustomEmailFieldState();
+}
+
+class _CustomEmailFieldState extends State<CustomEmailField> {
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 50.h,
-      child: TextField(
-        controller: controller,
+      child: TextFormField(
+        validator: (value) {
+          bool emailValid = RegExp(
+                  r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+              .hasMatch(value!);
+          if (emailValid == false) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(const SnackBar(content: Text("Invalid email")));
+          }
+          return null;
+        },
+        controller: widget.controller,
         cursorColor: KColors.green300,
         decoration: InputDecoration(
-          hintText: label,
+          errorBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.red),
+            borderRadius: BorderRadius.circular(10.r),
+          ),
+          hintText: widget.label,
           prefixIcon: Icon(
-            icon,
+            widget.icon,
             color: Colors.grey,
           ),
           fillColor: Colors.grey[100],

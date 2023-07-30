@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trash_out/authentication/auth_checker.dart';
+import 'package:trash_out/authentication/auth_screen.dart';
 import 'package:trash_out/authentication/forgot_password_page.dart';
 import 'package:trash_out/authentication/otp_page.dart';
 import 'package:trash_out/authentication/reset_password_screen.dart';
@@ -36,7 +36,7 @@ final router = GoRouter(
   initialLocation: '/',
   routes: <RouteBase>[
     GoRoute(
-      path: '/auth',
+      path: '/',
       builder: (context, state) => const AuthChecker(),
     ),
     GoRoute(
@@ -73,7 +73,8 @@ final router = GoRouter(
           // each routes with its sub routes if available e.g feed/uuid/details
           routes: <RouteBase>[
             GoRoute(
-              path: '/',
+              // path: '/home',
+              path: '/home',
               builder: (context, state) => const HomePage(),
               routes: <RouteBase>[
                 GoRoute(

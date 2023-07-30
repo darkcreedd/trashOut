@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,12 +8,14 @@ import 'package:icofont_flutter/icofont_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:responsive_grid/responsive_grid.dart';
+
 import 'package:trash_out/state/state.dart';
 
 import 'package:trash_out/utils/colors.dart';
 import 'package:trash_out/widgets/dashboard_item.dart';
 import 'package:trash_out/widgets/gap.dart';
 
+import '../state/user_state.dart';
 import '../state/waste_points_state.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -26,13 +27,6 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   //* Firebase table access
-  Future<DocumentSnapshot> getData() async {
-    await Firebase.initializeApp();
-    return await FirebaseFirestore.instance
-        .collection("users")
-        .doc("coupthfDu9PjXbWiC3VS")
-        .get();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +35,22 @@ class _HomePageState extends ConsumerState<HomePage> {
     final totalPoints = ref.watch(wastePointsProvider);
     final redeemedPoints = ref.watch(redeemedPointsProvider);
 
+    final user = ref.watch(userDetailsNotifierProvider);
+
+    // final user = ref.watch(userDataProvider);
+
+    // ref.listen(userDetailsNotifierProvider,(previous, next) {
+    //   previous = ;
+    // },);
+    // ref.read(userDetailsNotifierProvider.notifier).updateUser(
+    //     user: Authentication.appUser ??
+    //         AppUser(
+    //             name: 'no-username',
+    //             email: 'no-user',
+    //             password: 'password',
+    //             totalPoints: 0,
+    //             totalDisposals: 0,
+    //             redeemed: 0));
     //Todo: Firestore
 
     return SafeArea(
@@ -75,42 +85,15 @@ class _HomePageState extends ConsumerState<HomePage> {
                             const Expanded(child: SizedBox()),
                             const Text("Welcome back,"),
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 5.0),
-                              child: FutureBuilder(
-                                future: getData(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return const CircularProgressIndicator();
-                                  }
-                                  if (snapshot.hasData) {
-                                    return Text(
-                                      snapshot.data?["first name"],
-                                      style: TextStyle(
-                                          color: KColors.green300,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 15.sp),
-                                    );
-                                  } else if (snapshot.hasError) {
-                                    return Text(
-                                      "User",
-                                      style: TextStyle(
-                                          color: KColors.green300,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 15.sp),
-                                    );
-                                  }
-                                  return Text(
-                                    "User",
-                                    style: TextStyle(
-                                        color: KColors.green300,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15.sp),
-                                  );
-                                },
-                              ),
-                            ),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 5.0),
+                                child: Text(
+                                  user.name,
+                                  style: TextStyle(
+                                      color: KColors.green300,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15.sp),
+                                )),
                           ],
                         )
                       ],
@@ -161,7 +144,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ),
                   const Expanded(child: SizedBox()),
                   GestureDetector(
-                    onTap: () => context.push('/redeemPoints'),
+                    onTap: () => context.push('redeemPoints'),
                     child: Container(
                       decoration: BoxDecoration(
                           color: Colors.white,

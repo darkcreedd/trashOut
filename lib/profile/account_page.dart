@@ -4,8 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:icofont_flutter/icofont_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:trash_out/widgets/custom_button.dart';
-import 'package:trash_out/widgets/custom_text_field.dart';
+import 'package:trash_out/widgets/custom_textfield.dart';
 import 'package:trash_out/widgets/gap.dart';
+
+import '../widgets/custom_email_field.dart';
 
 class AccountPage extends StatelessWidget {
   const AccountPage({super.key});
@@ -81,7 +83,7 @@ class AccountPage extends StatelessWidget {
                           const CustomTextField(
                               icon: IcoFontIcons.user, label: "New Username"),
                           Gap(15.h),
-                          CustomTextField(
+                          CustomEmailField(
                               icon: MdiIcons.email, label: "New Email"),
                           Gap(15.h),
                           const CustomTextField(

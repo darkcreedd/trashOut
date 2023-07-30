@@ -11,20 +11,8 @@ class UserDetailsNotifier extends StateNotifier<AppUser> {
             totalPoints: 0,
             totalDisposals: 0,
             redeemed: 0));
-  updateUser(
-      {required String name,
-      required String email,
-      required String password,
-      required int totalPoints,
-      required int totalDisposals,
-      required int redeemed}) {
-    state = AppUser(
-        name: name,
-        email: email,
-        password: password,
-        totalPoints: totalPoints,
-        totalDisposals: totalDisposals,
-        redeemed: redeemed);
+  updateUser({required AppUser user}) {
+    state = user;
   }
 }
 
