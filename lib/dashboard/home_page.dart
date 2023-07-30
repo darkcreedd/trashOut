@@ -94,7 +94,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     );
                                   } else if (snapshot.hasError) {
                                     return Text(
-                                      "User error",
+                                      "User",
                                       style: TextStyle(
                                           color: KColors.green300,
                                           fontWeight: FontWeight.bold,
@@ -102,7 +102,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     );
                                   }
                                   return Text(
-                                    "User null",
+                                    "User",
                                     style: TextStyle(
                                         color: KColors.green300,
                                         fontWeight: FontWeight.bold,

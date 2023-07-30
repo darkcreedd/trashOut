@@ -118,8 +118,10 @@ class _SignUpPageState extends State<SignUpPage> {
                   if (passwordController.text ==
                       confirmPasswordController.text) {
                     Authentication()
-                        .signUpWithEmailAndPassword(emailController.text.trim(),
-                            passwordController.text.trim())
+                        .signUpWithEmailAndPassword(
+                            name: nameController.text.trim(),
+                            email: emailController.text.trim(),
+                            password: passwordController.text.trim())
                         .then((value) => context.go('/'));
                   }
                 },

@@ -3,9 +3,9 @@ class AppUser {
   final String name;
   final String email;
   final String password;
-  final String totalPoints;
-  final String totalDisposals;
-  final String redeemed;
+  final int totalPoints;
+  final int totalDisposals;
+  final int redeemed;
   AppUser({
     required this.name,
     required this.email,
