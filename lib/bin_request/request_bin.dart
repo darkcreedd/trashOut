@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trash_out/utils/colors.dart';
 import 'package:trash_out/widgets/bin_types_card.dart';
-import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
 class RequestBinPage extends StatelessWidget {
   const RequestBinPage({super.key});
@@ -16,7 +15,10 @@ class RequestBinPage extends StatelessWidget {
         leading: IconButton(
             splashRadius: 25.sp,
             onPressed: () => context.go('/profile'),
-            icon: const Icon(Icons.arrow_back_ios_new)),
+            icon: const Icon(
+              Icons.arrow_back_ios_new,
+              color: Colors.black,
+            )),
         backgroundColor: Colors.white,
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.black),
@@ -43,7 +45,14 @@ class RequestBinPage extends StatelessWidget {
           child: ListView(
             children: [
               BinTypesCard(
-                onPressed: () {},
+                onPressed: () {
+                  context.pushNamed("binConfirmationPage", pathParameters: {
+                    'binImage': "assets/images/bin_type_1.png",
+                    'material': "Metalic",
+                    'price': '250',
+                    'size': '200'
+                  });
+                },
                 containerSize: mediaQ,
                 image: "assets/images/bin_type_1.png",
                 price: 250,
@@ -54,7 +63,14 @@ class RequestBinPage extends StatelessWidget {
                 height: 15.h,
               ),
               BinTypesCard(
-                onPressed: () {},
+                onPressed: () {
+                  context.pushNamed("binConfirmationPage", pathParameters: {
+                    'binImage': "assets/images/bin_type_2.png",
+                    'material': "Plastic",
+                    'price': '230',
+                    'size': '360'
+                  });
+                },
                 containerSize: mediaQ,
                 image: "assets/images/bin_type_2.png",
                 price: 230,
@@ -65,18 +81,30 @@ class RequestBinPage extends StatelessWidget {
                 height: 15.h,
               ),
               BinTypesCard(
-                onPressed: () {},
+                onPressed: () =>
+                    context.pushNamed("binConfirmationPage", pathParameters: {
+                  'binImage': "assets/images/bin_type_3.png",
+                  'material': "Plastic",
+                  'price': '550',
+                  'size': '600'
+                }),
                 containerSize: mediaQ,
                 image: "assets/images/bin_type_3.png",
                 price: 550,
-                size: 800,
+                size: 600,
                 type: "Plastic",
               ),
               SizedBox(
                 height: 15.h,
               ),
               BinTypesCard(
-                onPressed: () {},
+                onPressed: () =>
+                    context.pushNamed("binConfirmationPage", pathParameters: {
+                  'binImage': "assets/images/bin_type_4.png",
+                  'material': "Plastic",
+                  'price': '210',
+                  'size': '270'
+                }),
                 containerSize: mediaQ,
                 image: "assets/images/bin_type_4.png",
                 price: 210,
@@ -97,7 +125,7 @@ class RequestBinPage extends StatelessWidget {
                     BoxShadow(
                         color: Colors.grey.shade500,
                         spreadRadius: 2,
-                        blurRadius: 2)
+                        blurRadius: 2),
                   ],
                 ),
                 child: Column(
@@ -131,51 +159,13 @@ class RequestBinPage extends StatelessWidget {
                             backgroundColor: Colors.orange,
                             shape: const StadiumBorder(),
                             fixedSize: Size(200.w, 40.h)),
-                        onPressed: () {
-                          // Get.bottomSheet(
-                          //   BottomSheet(
-                          //     backgroundColor: Colors.transparent,
-                          //     onClosing: () {},
-                          //     builder: (context) => Container(
-                          //       margin: EdgeInsets.all(10.h),
-                          //       height: 100.h,
-                          //       width: mediaQ.width,
-                          //       decoration: BoxDecoration(
-                          //         color: Colors.white,
-                          //         borderRadius: BorderRadius.circular(20.r),
-                          //       ),
-                          //       child: Center(
-                          //         child: GestureDetector(
-                          //           onTap: _callNumber,
-                          //           child: Column(
-                          //             mainAxisAlignment:
-                          //                 MainAxisAlignment.center,
-                          //             children: [
-                          //               Text(
-                          //                 "Call number",
-                          //                 style: TextStyle(
-                          //                     color: Colors.black,
-                          //                     fontWeight: FontWeight.bold,
-                          //                     fontSize: 14.sp),
-                          //               ),
-                          //               Text(
-                          //                 "0207644110",
-                          //                 style: TextStyle(
-                          //                     color: KColors.primaryBlue,
-                          //                     fontSize: 18.sp),
-                          //               ),
-                          //             ],
-                          //           ),
-                          //         ),
-                          //       ),
-                          //     ),
-                          //   ),
-                          // );
-                        },
+                        onPressed: () {},
                         child: Text(
-                          "Place Custom Order",
+                          "020-0000-000",
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 13.sp),
+                              letterSpacing: 2,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13.sp),
                         ),
                       ),
                     )
@@ -188,9 +178,4 @@ class RequestBinPage extends StatelessWidget {
       ),
     );
   }
-}
-
-_callNumber() async {
-  const number = '0207644110'; //set the number here
-  await FlutterPhoneDirectCaller.callNumber(number);
 }

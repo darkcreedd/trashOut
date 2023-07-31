@@ -1,14 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file: no_leading_underscores_for_local_identifiers
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:trash_out/authentication/sign_in_page.dart';
 import 'package:trash_out/authentication/splash_screen.dart';
-import 'package:trash_out/state/firebase_authentication.dart';
 import 'package:trash_out/utils/colors.dart';
 
 import '../state/auth.dart';

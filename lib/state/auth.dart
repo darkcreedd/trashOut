@@ -8,6 +8,8 @@ class FirebaseAuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   Stream<User?> get authStateChange => _auth.authStateChanges();
+  String? errorMessage;
+  String? get authError => errorMessage;
 
   Stream<User?> get authStateChanges => _auth.authStateChanges();
   Future<User?> signInWithEmailAndPass(
@@ -19,7 +21,7 @@ class FirebaseAuthService {
       );
       return result.user;
     } on FirebaseAuthException catch (e) {
-      String errorMessage = _handleSignInException(e);
+      errorMessage = _handleSignInException(e);
       print('Error signing in: $errorMessage');
       return null;
     } catch (e) {
@@ -59,7 +61,7 @@ class FirebaseAuthService {
     try {
       await _auth.signOut();
     } on FirebaseAuthException catch (e) {
-      String errorMessage = _handleSignOutException(e);
+      errorMessage = _handleSignOutException(e);
       print('Error signing out: $errorMessage');
     } catch (e) {
       print('Error signing out: $e');
@@ -110,8 +112,8 @@ class FirebaseAuthService {
     }
   }
 
-  String _handleSignInException(FirebaseAuthException e) {
-    String errorMessage;
+  String? _handleSignInException(FirebaseAuthException e) {
+    errorMessage;
     switch (e.code) {
       case 'user-not-found':
         errorMessage = 'User not found. Please check your email and try again.';
@@ -128,8 +130,8 @@ class FirebaseAuthService {
     return errorMessage;
   }
 
-  String _handleCreateAccountException(FirebaseAuthException e) {
-    String errorMessage;
+  String? _handleCreateAccountException(FirebaseAuthException e) {
+    errorMessage;
     switch (e.code) {
       case 'email-already-in-use':
         errorMessage = 'This email address is already in use.';
@@ -151,6 +153,7 @@ class FirebaseAuthService {
   String _handleSignOutException(FirebaseAuthException e) {
     // You may handle specific sign-out exceptions if needed.
     // Currently, we are not differentiating sign-out exceptions.
+    errorMessage = e.message;
     return 'An error occurred while signing out. Please try again.';
   }
 }
@@ -170,4 +173,9 @@ final userDataProvider =
     FutureProvider.family<Map<String, dynamic>?, String>((ref, userId) async {
   final authService = ref.read(firebaseAuthServiceProvider);
   return await authService.fetchUserData(userId);
+});
+
+// Riverpod provider for Error Messages.
+final errorMessageProvider = Provider<String?>((ref) {
+  return ref.read(firebaseAuthServiceProvider).authError;
 });

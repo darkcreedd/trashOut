@@ -144,7 +144,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ),
                   const Expanded(child: SizedBox()),
                   GestureDetector(
-                    onTap: () => context.push('redeemPoints'),
+                    onTap: () => context.push('/home/redeemPoints'),
                     child: Container(
                       decoration: BoxDecoration(
                           color: Colors.white,
@@ -194,7 +194,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                           ref
                               .read(wasteClassProvider.notifier)
                               .setWasteClass('Domestic');
-                          context.push('/domestic');
+                          context.push('/home/domestic');
                         },
                         child: Card(
                           elevation: 2,
@@ -242,7 +242,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                           ref
                               .read(wasteClassProvider.notifier)
                               .setWasteClass('Medical');
-                          context.push('/medical');
+                          context.push('/home/medical');
                         },
                         child: Card(
                           elevation: 2,
@@ -289,7 +289,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                           ref
                               .read(wasteClassProvider.notifier)
                               .setWasteClass("Industrial");
-                          context.push('/industrial');
+                          context.push('/home/industrial');
                         },
                         child: Card(
                           elevation: 2,
@@ -333,7 +333,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                       xs: 6,
                       md: 3,
                       child: GestureDetector(
-                        onTap: () => context.push('/wasteClassification'),
+                        onTap: () => context.push('/home/wasteClassification'),
                         child: Card(
                           elevation: 2,
                           shadowColor: Colors.grey.shade100,

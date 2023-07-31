@@ -132,7 +132,7 @@ class _CardConfirmationState extends ConsumerState<CardConfirmation> {
                           ),
                         );
                       }).then((value) {
-                    context.go('/');
+                    context.go('/home');
                   });
                 } else {
                   showDialog(
@@ -157,7 +157,7 @@ class _CardConfirmationState extends ConsumerState<CardConfirmation> {
                               ),
                               Gap(20.h),
                               Text(
-                                "You don't have sufficient to redeem this gift card points",
+                                "You don't have sufficient points to redeem this gift card",
                                 style: TextStyle(
                                     fontSize: 14.sp,
                                     fontWeight: FontWeight.bold),

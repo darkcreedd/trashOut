@@ -50,10 +50,10 @@ class CustomOutlinedButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(8.r),
             ),
             backgroundColor: Colors.transparent,
-            fixedSize: Size(250.w, 50.h)),
-        onPressed: () {},
+            fixedSize: Size(230.w, 50.h)),
+        onPressed: onPressed,
         child: Text(
-          "Login",
+          text,
           style:
               TextStyle(fontWeight: FontWeight.bold, color: KColors.green300),
         ));

@@ -122,54 +122,61 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                       if (valid) {
                         FirebaseAuthService()
                             .signInWithEmailAndPass(
-                                email: emailController.text.trim(),
-                                password: passwordController.text.trim())
-                            .then((user) {
-                          if (user != null) {
-                            ScaffoldMessenger.of(context).showSnackBar(
+                          email: emailController.text.trim(),
+                          password: passwordController.text.trim(),
+                        )
+                            .then(
+                          (user) {
+                            if (user != null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                    backgroundColor: Colors.green,
-                                    content: Text("Success")));
+                                  backgroundColor: Colors.green,
+                                  content: Text("Success"),
+                                ),
+                              );
 
-                            context.go('/');
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
+                              context.go('/');
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                    content: Text("User not found")));
-                          }
-                        });
+                                  content: Text("User not found"),
+                                ),
+                              );
+                            }
+                          },
+                        );
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text("Invalid username or password")));
+                          const SnackBar(
+                            content: Text("Invalid username or password"),
+                          ),
+                        );
                       }
-                    }
-                    //  () => handleSubmit()
-
-                    ),
+                    }),
                 Gap(30.h),
                 Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          "Don't have an account ?",
+                  alignment: Alignment.bottomCenter,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        "Don't have an account ?",
+                        style: TextStyle(
+                            color: KColors.green300,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      GestureDetector(
+                        onTap: () => context.go('/signUp'),
+                        child: Text(
+                          "  Sign up",
                           style: TextStyle(
-                              color: KColors.green300,
+                              color: KColors.green200,
                               fontWeight: FontWeight.bold),
                         ),
-                        GestureDetector(
-                          onTap: () => context.go('/signUp'),
-                          child: Text(
-                            "  Sign up",
-                            style: TextStyle(
-                                color: KColors.green200,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        )
-                      ],
-                    )),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),

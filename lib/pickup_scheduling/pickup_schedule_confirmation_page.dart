@@ -25,7 +25,7 @@ class _PickupScheduleConfirmationPageState
     final dateAndtime = ref.watch(wasteDateTimeProvider);
     final wasteType = ref.watch(wasteTypesProvider);
     final wasteClass = ref.watch(wasteClassProvider);
-    final wasteList = ref.watch(wasteListProvider);
+    // final wasteList = ref.watch(wasteListProvider);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -211,7 +211,7 @@ class _PickupScheduleConfirmationPageState
                         location: "College of Science,KNUST",
                         points: 80000);
                     print('Updated wasteList: ${ref.watch(wasteListProvider)}');
-                    context.go('/');
+                    context.go('/home');
                   },
                 ),
               ),

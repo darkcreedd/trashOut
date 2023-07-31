@@ -140,7 +140,7 @@ class _DateAndTimePickingPageState
                   ref.read(wasteDateTimeProvider.notifier).addWasteDateTime(
                       wasteDate: newSelectedDay, wasteTime: newSelectedTime);
 
-                  context.push('/pickupConfirmation');
+                  context.pushNamed('pickupConfirmation');
                 }),
             SizedBox(
               height: 20.h,

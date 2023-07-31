@@ -53,7 +53,7 @@ class _IndustrialWasteSpecificationPageState
       appBar: AppBar(
         leading: IconButton(
             splashRadius: 25.sp,
-            onPressed: () => context.go('/'),
+            onPressed: () => context.go('/home'),
             icon: const Icon(
               Icons.arrow_back_ios_new,
               color: Colors.black,
@@ -171,7 +171,7 @@ class _IndustrialWasteSpecificationPageState
                       ref
                           .read(wasteTypesProvider.notifier)
                           .addWasteType(selectedTypes);
-                      context.push('/date');
+                      context.pushNamed('date');
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(

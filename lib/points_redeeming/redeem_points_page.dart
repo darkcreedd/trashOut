@@ -27,7 +27,7 @@ class _RedeemPointsPageState extends State<RedeemPointsPage> {
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
-              onPressed: () => context.go('/'),
+              onPressed: () => context.go('/home'),
               splashRadius: 25.r,
               icon: const Icon(
                 Icons.arrow_back_ios,

@@ -5,8 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icofont_flutter/icofont_flutter.dart';
 import 'package:trash_out/state/auth.dart';
-import 'package:trash_out/state/firebase_authentication.dart';
-import 'package:trash_out/state/user_state.dart';
 import 'package:trash_out/utils/colors.dart';
 import 'package:trash_out/widgets/gap.dart';
 import 'package:trash_out/widgets/profile_tab.dart';
@@ -22,7 +20,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     var mediaQ = MediaQuery.sizeOf(context);
-    final user = ref.watch(userDetailsNotifierProvider);
+    // final user = ref.watch(userDetailsNotifierProvider);
 
     return Scaffold(
       backgroundColor: Colors.grey[200],
