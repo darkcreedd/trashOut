@@ -1,5 +1,6 @@
 // ignore_for_file: unused_field
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -40,6 +41,17 @@ class _SignInPageState extends ConsumerState<SignInPage> {
       return true;
     } else {
       return false;
+    }
+  }
+
+  String? errorMessage;
+
+  signIn({required String email, required String password}) async {
+    try {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+    } on FirebaseAuthException catch (e) {
+      errorMessage = FirebaseAuthService().handleSignInException(e);
     }
   }
 
@@ -120,35 +132,11 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                         password: passwordController.text.trim(),
                       );
                       if (valid) {
-                        FirebaseAuthService()
-                            .signInWithEmailAndPass(
-                          email: emailController.text.trim(),
-                          password: passwordController.text.trim(),
-                        )
-                            .then(
-                          (user) {
-                            if (user != null) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  backgroundColor: Colors.green,
-                                  content: Text("Success"),
-                                ),
-                              );
-
-                              context.go('/');
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("User not found"),
-                                ),
-                              );
-                            }
-                          },
-                        );
+                        context.go('/');
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text("Invalid username or password"),
+                            content: Text("Enter a valid email"),
                           ),
                         );
                       }

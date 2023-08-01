@@ -1,7 +1,7 @@
 //Todo: Waste points Computation
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'state.dart';
+import '../pickup_scheduling/state.dart';
 
 class WastePointsNotifier extends StateNotifier<int> {
   WastePointsNotifier() : super(0);

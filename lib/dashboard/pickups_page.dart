@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:trash_out/state/state.dart';
+import 'package:trash_out/pickup_scheduling/state.dart';
 import 'package:trash_out/state/waste_points_state.dart';
 
 import 'package:trash_out/utils/colors.dart';

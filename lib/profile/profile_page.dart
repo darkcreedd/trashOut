@@ -47,7 +47,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                   ),
                   Gap(10.h),
                   // Text(user.email),
-                  Text(FirebaseAuth.instance.currentUser!.displayName!),
+                  Text(FirebaseAuth.instance.currentUser!.email!),
 
                   const Row(
                     mainAxisSize: MainAxisSize.min,

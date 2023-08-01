@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trash_out/authentication/auth_screen.dart';
 import 'package:trash_out/authentication/forgot_password_page.dart';
-import 'package:trash_out/authentication/otp_page.dart';
-import 'package:trash_out/authentication/reset_password_screen.dart';
+import 'package:trash_out/authentication/recover_account.dart';
 import 'package:trash_out/authentication/sign_in_page.dart';
 import 'package:trash_out/authentication/sign_up_page.dart';
 import 'package:trash_out/bin_request/bin_request_confirmation_screen.dart';
@@ -53,11 +52,7 @@ final router = GoRouter(
     ),
     GoRoute(
       path: '/otpScreen',
-      builder: (context, state) => const OTPPage(),
-    ),
-    GoRoute(
-      path: '/passwordReset',
-      builder: (context, state) => const ResetPasswordPage(),
+      builder: (context, state) => const RecoverAccount(),
     ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {

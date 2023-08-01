@@ -1,10 +1,13 @@
 // import 'package:awesome_dialog/awesome_dialog.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:trash_out/state/state.dart';
+import 'package:trash_out/pickup_scheduling/state.dart';
 import 'package:trash_out/utils/colors.dart';
 import 'package:trash_out/widgets/custom_button.dart';
 import 'package:trash_out/widgets/gap.dart';
@@ -25,6 +28,8 @@ class _PickupScheduleConfirmationPageState
     final dateAndtime = ref.watch(wasteDateTimeProvider);
     final wasteType = ref.watch(wasteTypesProvider);
     final wasteClass = ref.watch(wasteClassProvider);
+    final images = ref.watch(imagesProvider);
+
     // final wasteList = ref.watch(wasteListProvider);
     return Scaffold(
       appBar: AppBar(
@@ -169,33 +174,52 @@ class _PickupScheduleConfirmationPageState
               ),
               Gap(10.h),
               Wrap(
-                children: [
-                  Container(
-                    height: 70.h,
-                    width: 100.w,
-                    margin: const EdgeInsets.only(right: 5).w,
-                    decoration: BoxDecoration(
-                        color: Colors.amber,
-                        borderRadius: BorderRadius.circular(10.r)),
+                  children: List.generate(
+                images.length,
+                (index) => Container(
+                  height: 80.h,
+                  width: 100.w,
+                  margin: const EdgeInsets.only(right: 5).w,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    image: DecorationImage(
+                      fit: BoxFit.fill,
+                      image: FileImage(
+                        File(images[index]!.path),
+                      ),
+                    ),
+                    // color: Colors.amber,
+                    borderRadius: BorderRadius.circular(10.r),
                   ),
-                  Container(
-                    height: 70.h,
-                    width: 100.w,
-                    margin: const EdgeInsets.only(right: 5).w,
-                    decoration: BoxDecoration(
-                        color: Colors.amber,
-                        borderRadius: BorderRadius.circular(10.r)),
+                ),
+              )
+                  //[
+                  // Container(
+                  //   height: 70.h,
+                  //   width: 100.w,
+                  //   margin: const EdgeInsets.only(right: 5).w,
+                  //   decoration: BoxDecoration(
+                  //       color: Colors.amber,
+                  //       borderRadius: BorderRadius.circular(10.r)),
+                  // ),
+                  //   Container(
+                  //     height: 70.h,
+                  //     width: 100.w,
+                  //     margin: const EdgeInsets.only(right: 5).w,
+                  //     decoration: BoxDecoration(
+                  //         color: Colors.amber,
+                  //         borderRadius: BorderRadius.circular(10.r)),
+                  //   ),
+                  //   Container(
+                  //     height: 70.h,
+                  //     width: 100.w,
+                  //     margin: const EdgeInsets.only(right: 5).w,
+                  //     decoration: BoxDecoration(
+                  //         color: Colors.amber,
+                  //         borderRadius: BorderRadius.circular(10.r)),
+                  //   )
+                  // ],
                   ),
-                  Container(
-                    height: 70.h,
-                    width: 100.w,
-                    margin: const EdgeInsets.only(right: 5).w,
-                    decoration: BoxDecoration(
-                        color: Colors.amber,
-                        borderRadius: BorderRadius.circular(10.r)),
-                  )
-                ],
-              ),
               Gap(20.h),
               Align(
                 alignment: Alignment.bottomCenter,

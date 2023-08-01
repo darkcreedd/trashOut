@@ -1,17 +1,17 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file: avoid_print
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class FirebaseAuthService {
+class FirebaseAuthService extends StateNotifier<String?> {
+  FirebaseAuthService() : super(null);
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  Stream<User?> get authStateChange => _auth.authStateChanges();
-  String? errorMessage;
-  String? get authError => errorMessage;
 
   Stream<User?> get authStateChanges => _auth.authStateChanges();
+
   Future<User?> signInWithEmailAndPass(
       {required String email, required String password}) async {
     try {
@@ -19,16 +19,35 @@ class FirebaseAuthService {
         email: email,
         password: password,
       );
+      if (result.user != null) {
+        await fetchUserData(result.user!.uid);
+      }
       return result.user;
     } on FirebaseAuthException catch (e) {
-      errorMessage = _handleSignInException(e);
-      print('Error signing in: $errorMessage');
+      String? signInError = handleSignInException(e);
+      state = signInError;
+      print('Error signing in: $signInError');
+      print('the error occured here state**** $state');
+
       return null;
     } catch (e) {
+      String signInError =
+          'An error occurred while signing in. Please try again.';
+      // Set the error message using the AuthErrorNotifier
+      state = signInError;
+
       print('Error signing in: $e');
       return null;
     }
   }
+
+  // passwordReset({required String email})async{
+  //   try{
+  //     await _auth.sendPasswordResetEmail(email: email);
+  //   }on FirebaseAuthException catch(e){
+  //     print(e.message);
+  //   }
+  // }
 
   Future<User?> createAccountWithEmailAndPass(
       {required String email,
@@ -50,7 +69,8 @@ class FirebaseAuthService {
 
       return result.user;
     } on FirebaseAuthException catch (e) {
-      _handleCreateAccountException(e);
+      String? signupError = handleCreateAccountException(e);
+      state = signupError;
     } catch (e) {
       print(e);
     }
@@ -61,8 +81,9 @@ class FirebaseAuthService {
     try {
       await _auth.signOut();
     } on FirebaseAuthException catch (e) {
-      errorMessage = _handleSignOutException(e);
-      print('Error signing out: $errorMessage');
+      String signOutError = _handleSignOutException(e);
+      state = signOutError;
+      print('Error signing out: $signOutError');
     } catch (e) {
       print('Error signing out: $e');
     }
@@ -112,48 +133,47 @@ class FirebaseAuthService {
     }
   }
 
-  String? _handleSignInException(FirebaseAuthException e) {
-    errorMessage;
+  String? handleSignInException(FirebaseAuthException e) {
+    String signInError;
     switch (e.code) {
       case 'user-not-found':
-        errorMessage = 'User not found. Please check your email and try again.';
+        signInError = 'User not found. Please check your email and try again.';
         break;
       case 'wrong-password':
-        errorMessage = 'Incorrect password. Please try again.';
+        signInError = 'Incorrect password. Please try again.';
         break;
       case 'invalid-email':
-        errorMessage = 'Invalid email address. Please enter a valid email.';
+        signInError = 'Invalid email address. Please enter a valid email.';
         break;
       default:
-        errorMessage = 'An error occurred while signing in. Please try again.';
+        signInError = 'An error occurred while signing in. Please try again.';
     }
-    return errorMessage;
+    return signInError;
   }
 
-  String? _handleCreateAccountException(FirebaseAuthException e) {
-    errorMessage;
+  String? handleCreateAccountException(FirebaseAuthException e) {
+    String signupError;
     switch (e.code) {
       case 'email-already-in-use':
-        errorMessage = 'This email address is already in use.';
+        signupError = 'This email address is already in use.';
         break;
       case 'weak-password':
-        errorMessage =
+        signupError =
             'The password is too weak. Please choose a stronger password.';
         break;
       case 'invalid-email':
-        errorMessage = 'Invalid email address. Please enter a valid email.';
+        signupError = 'Invalid email address. Please enter a valid email.';
         break;
       default:
-        errorMessage =
+        signupError =
             'An error occurred while creating an account. Please try again.';
     }
-    return errorMessage;
+    return signupError;
   }
 
   String _handleSignOutException(FirebaseAuthException e) {
     // You may handle specific sign-out exceptions if needed.
     // Currently, we are not differentiating sign-out exceptions.
-    errorMessage = e.message;
     return 'An error occurred while signing out. Please try again.';
   }
 }
@@ -162,20 +182,33 @@ class FirebaseAuthService {
 
 // Riverpod provider for FirebaseAuthService.
 final firebaseAuthServiceProvider =
-    Provider<FirebaseAuthService>((ref) => FirebaseAuthService());
+    StateProvider<FirebaseAuthService>((ref) => FirebaseAuthService());
 
 final authStateProvider = StreamProvider<User?>((ref) {
-  return ref.read(firebaseAuthServiceProvider).authStateChange;
+  return ref.read(firebaseAuthServiceProvider).authStateChanges;
 });
 
-// Riverpod provider for the user data fetched from Firestore.
-final userDataProvider =
-    FutureProvider.family<Map<String, dynamic>?, String>((ref, userId) async {
-  final authService = ref.read(firebaseAuthServiceProvider);
-  return await authService.fetchUserData(userId);
+class UserDataProvider extends StateNotifier<UserData?> {
+  UserDataProvider() : super(null);
+
+  void setUserData(UserData userData) {
+    state = userData;
+  }
+
+  void clearUserData() {
+    state = null;
+  }
+}
+
+final userDataProvider = StateProvider((ref) {
+  return ref
+      .read(firebaseAuthServiceProvider)
+      .fetchUserData(FirebaseAuth.instance.currentUser!.uid);
 });
 
-// Riverpod provider for Error Messages.
-final errorMessageProvider = Provider<String?>((ref) {
-  return ref.read(firebaseAuthServiceProvider).authError;
-});
+class UserData {
+  String uid;
+  // Add other properties related to user data that you want to track
+
+  UserData(this.uid);
+}

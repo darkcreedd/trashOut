@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:trash_out/state/auth.dart';
 
 import 'package:trash_out/utils/colors.dart';
 import 'package:trash_out/widgets/custom_button.dart';
@@ -11,14 +11,14 @@ import 'package:trash_out/widgets/custom_email_field.dart';
 import 'package:trash_out/widgets/custom_textfield.dart';
 import 'package:trash_out/widgets/gap.dart';
 
-class SignUpPage extends StatefulWidget {
+class SignUpPage extends ConsumerStatefulWidget {
   const SignUpPage({super.key});
 
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _SignUpPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class _SignUpPageState extends ConsumerState<SignUpPage> {
   final TextEditingController nameController = TextEditingController();
 
   final TextEditingController emailController = TextEditingController();
@@ -28,45 +28,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
   bool keepMeloggedIn = true;
   final _formKey = GlobalKey<FormState>();
-
-  handleSubmit() async {
-    if (emailController.text.isNotEmpty &&
-        nameController.text.isNotEmpty &&
-        passwordController.text.isNotEmpty) {
-      final email = emailController.text;
-      final password = passwordController.text;
-      final name = nameController.text;
-
-      if (RegExp(
-              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-          .hasMatch(email)) {
-        // ref.read(authStateProvider).;
-        FirebaseAuthService()
-            .createAccountWithEmailAndPass(
-                email: email, password: password, userName: name)
-            .then((user) {
-          if (user != null) {
-            context.go('/home');
-          } else {
-            //ToDo: handle errors
-            ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("An error occurred")));
-          }
-        });
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("Loading...")));
-
-        return;
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            backgroundColor: Colors.red, content: Text("Invalid email")));
-      }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          backgroundColor: Colors.red,
-          content: Text("All fields are requirements")));
-    }
-  }
 
   bool newsLetter = true;
 
@@ -157,21 +118,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       ],
                     )),
                 Gap(50.h),
-                CustomButton(
-                  text: "Create Account",
-                  onPressed: () {
-                    if (passwordController.text ==
-                        confirmPasswordController.text) {
-                      handleSubmit();
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Password mismatch"),
-                        ),
-                      );
-                    }
-                  },
-                ),
+                CustomButton(text: "Create Account", onPressed: () async {}),
                 Gap(30.h),
                 GestureDetector(
                   onTap: () => context.go('/signIn'),

@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,7 +10,8 @@ import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 
-import 'package:trash_out/state/state.dart';
+import 'package:trash_out/pickup_scheduling/state.dart';
+import 'package:trash_out/state/auth.dart';
 
 import 'package:trash_out/utils/colors.dart';
 import 'package:trash_out/widgets/dashboard_item.dart';
@@ -36,21 +38,9 @@ class _HomePageState extends ConsumerState<HomePage> {
     final redeemedPoints = ref.watch(redeemedPointsProvider);
 
     final user = ref.watch(userDetailsNotifierProvider);
+    final userData = ref.watch(userDataProvider);
 
-    // final user = ref.watch(userDataProvider);
-
-    // ref.listen(userDetailsNotifierProvider,(previous, next) {
-    //   previous = ;
-    // },);
-    // ref.read(userDetailsNotifierProvider.notifier).updateUser(
-    //     user: Authentication.appUser ??
-    //         AppUser(
-    //             name: 'no-username',
-    //             email: 'no-user',
-    //             password: 'password',
-    //             totalPoints: 0,
-    //             totalDisposals: 0,
-    //             redeemed: 0));
+    String userNew = userData.toString();
     //Todo: Firestore
 
     return SafeArea(

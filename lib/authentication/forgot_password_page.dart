@@ -1,4 +1,7 @@
+import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -8,8 +11,16 @@ import 'package:trash_out/widgets/custom_button.dart';
 import 'package:trash_out/widgets/custom_email_field.dart';
 import 'package:trash_out/widgets/gap.dart';
 
-class ForgotPasswordPage extends StatelessWidget {
+class ForgotPasswordPage extends ConsumerStatefulWidget {
   const ForgotPasswordPage({super.key});
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _ForgotPasswordPageState();
+}
+
+class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
+  TextEditingController emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -45,12 +56,68 @@ class ForgotPasswordPage extends StatelessWidget {
               CustomEmailField(
                 icon: MdiIcons.email,
                 label: "Email",
+                controller: emailController,
               ),
               Gap(50.h),
               CustomButton(
                 text: "Submit",
-                onPressed: () {
-                  context.push('/otpScreen');
+                onPressed: () async {
+                  FocusManager.instance.primaryFocus!.unfocus();
+
+                  String email = emailController.text.trim();
+                  bool isValid = EmailValidator.validate(email);
+                  if (isValid) {
+                    // ref.read(emailProvider.notifier).setEmail(email);
+                    // try {
+                    //   FirebaseAuth.instance
+                    //       .sendPasswordResetEmail(email: email)
+                    //       .then(
+                    //         (value) =>
+                    //             ScaffoldMessenger.of(context).showSnackBar(
+                    //           const SnackBar(
+                    //             backgroundColor: Colors.green,
+                    //             content: Text(
+                    //               'Reset link sent',
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       )
+                    //       .then((value) => context.push('/otpScreen'));
+                    // } on FirebaseAuthException catch (e) {
+                    //   ScaffoldMessenger.of(context).showSnackBar(
+                    //     SnackBar(
+                    //       content: Text(
+                    //         e.toString(),
+                    //       ),
+                    //     ),
+                    //   );
+                    // }
+                    try {
+                      FirebaseAuth.instance
+                          .sendPasswordResetEmail(email: email)
+                          .then(
+                            (value) =>
+                                ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                backgroundColor: Colors.green,
+                                content: Text('Reset link sent'),
+                              ),
+                            ),
+                          )
+                          .then((value) => context.push('/otpScreen'));
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            e.toString(),
+                          ),
+                        ),
+                      );
+                    }
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Invalid email, try again.")));
+                  }
                 },
               ),
               Gap(30.h),
@@ -74,3 +141,14 @@ class ForgotPasswordPage extends StatelessWidget {
     );
   }
 }
+
+class EmailNotifier extends StateNotifier<String?> {
+  EmailNotifier() : super('');
+  setEmail(String email) {
+    state = email;
+  }
+}
+
+final emailProvider = StateNotifierProvider<EmailNotifier, String?>((ref) {
+  return EmailNotifier();
+});

@@ -307,6 +307,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../models/waste_model.dart';
 
@@ -429,3 +430,29 @@ class WasteType {
     this.wasteTypes,
   });
 }
+
+class ImagesNotifier extends StateNotifier<List<XFile?>> {
+  ImagesNotifier() : super([]);
+
+  // Method to add images to the state
+  void addImages(List<XFile?> newImages) {
+    // Get the current state
+    final currentState = state;
+
+    // Add the new images to the current state
+    final updatedState = [...currentState, ...newImages];
+
+    // Update the state with the new list of images
+    state = updatedState;
+  }
+
+  void clearImages() {
+    // Clear the state of the new list of images
+    state = [];
+  }
+}
+
+final imagesProvider =
+    StateNotifierProvider<ImagesNotifier, List<XFile?>>((ref) {
+  return ImagesNotifier();
+});
