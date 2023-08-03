@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icofont_flutter/icofont_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import 'package:trash_out/utils/colors.dart';
 import 'package:trash_out/widgets/custom_button.dart';
@@ -59,10 +58,7 @@ class _DomesticWasteSpecificationPageState
 
   final ImagePicker picker = ImagePicker();
   bool isPicked = false;
-// Pick an image.
-// final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-// Capture a photo.
-// final XFile? photo = await picker.pickImage(source: ImageSource.camera);
+
   List<XFile?>? images;
   @override
   Widget build(BuildContext context) {

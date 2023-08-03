@@ -11,7 +11,6 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:responsive_grid/responsive_grid.dart';
 
 import 'package:trash_out/pickup_scheduling/state.dart';
-import 'package:trash_out/state/auth.dart';
 
 import 'package:trash_out/utils/colors.dart';
 import 'package:trash_out/widgets/dashboard_item.dart';
@@ -28,8 +27,6 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
-  //* Firebase table access
-
   @override
   Widget build(BuildContext context) {
     var mediaQ = MediaQuery.sizeOf(context);
@@ -38,10 +35,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     final redeemedPoints = ref.watch(redeemedPointsProvider);
 
     final user = ref.watch(userDetailsNotifierProvider);
-    final userData = ref.watch(userDataProvider);
-
-    String userNew = userData.toString();
-    //Todo: Firestore
 
     return SafeArea(
       child: Scaffold(
@@ -78,7 +71,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 5.0),
                                 child: Text(
-                                  user.name,
+                                  FirebaseAuth
+                                      .instance.currentUser!.displayName!,
                                   style: TextStyle(
                                       color: KColors.green300,
                                       fontWeight: FontWeight.bold,

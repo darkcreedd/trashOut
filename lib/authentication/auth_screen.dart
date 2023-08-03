@@ -9,7 +9,7 @@ import 'package:trash_out/authentication/sign_in_page.dart';
 import 'package:trash_out/authentication/splash_screen.dart';
 import 'package:trash_out/utils/colors.dart';
 
-import '../state/auth.dart';
+import '../providers/auth_provider.dart';
 
 class AuthChecker extends ConsumerWidget {
   const AuthChecker({Key? key}) : super(key: key);
@@ -19,12 +19,12 @@ class AuthChecker extends ConsumerWidget {
     final _authState = ref.watch(authStateProvider);
 
     return _authState.when(
-        data: (data) {
-          if (data != null) return const Redirect();
+        data: (user) {
+          if (user != null) return const Redirect();
           return const SignInPage();
         },
         loading: () => const SplashScreen(),
-        error: (e, trace) => ErrorScreen(e: e, trace: trace));
+        error: (e, trace) => const SignInPage());
   }
 }
 
@@ -38,7 +38,7 @@ class Redirect extends StatefulWidget {
 class _RedirectState extends State<Redirect> {
   @override
   void initState() {
-    Future.delayed(const Duration(milliseconds: 300))
+    Future.delayed(const Duration(milliseconds: 100))
         .then((value) => context.go('/home'));
     super.initState();
   }

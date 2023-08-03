@@ -21,7 +21,7 @@ class ForgotPasswordPage extends ConsumerStatefulWidget {
 
 class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
   TextEditingController emailController = TextEditingController();
-
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     var mediaQ = MediaQuery.sizeOf(context);
@@ -59,67 +59,62 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
                 controller: emailController,
               ),
               Gap(50.h),
-              CustomButton(
-                text: "Submit",
-                onPressed: () async {
-                  FocusManager.instance.primaryFocus!.unfocus();
+              (!isLoading)
+                  ? CustomButton(
+                      text: "Submit",
+                      onPressed: () async {
+                        FocusManager.instance.primaryFocus!.unfocus();
 
-                  String email = emailController.text.trim();
-                  bool isValid = EmailValidator.validate(email);
-                  if (isValid) {
-                    // ref.read(emailProvider.notifier).setEmail(email);
-                    // try {
-                    //   FirebaseAuth.instance
-                    //       .sendPasswordResetEmail(email: email)
-                    //       .then(
-                    //         (value) =>
-                    //             ScaffoldMessenger.of(context).showSnackBar(
-                    //           const SnackBar(
-                    //             backgroundColor: Colors.green,
-                    //             content: Text(
-                    //               'Reset link sent',
-                    //             ),
-                    //           ),
-                    //         ),
-                    //       )
-                    //       .then((value) => context.push('/otpScreen'));
-                    // } on FirebaseAuthException catch (e) {
-                    //   ScaffoldMessenger.of(context).showSnackBar(
-                    //     SnackBar(
-                    //       content: Text(
-                    //         e.toString(),
-                    //       ),
-                    //     ),
-                    //   );
-                    // }
-                    try {
-                      FirebaseAuth.instance
-                          .sendPasswordResetEmail(email: email)
-                          .then(
-                            (value) =>
-                                ScaffoldMessenger.of(context).showSnackBar(
+                        String email = emailController.text.trim();
+                        bool isValid = EmailValidator.validate(email);
+                        if (isValid) {
+                          ref.read(emailProvider.notifier).setEmail(email);
+                          try {
+                            setState(() {
+                              isLoading = true;
+                            });
+                            await FirebaseAuth.instance
+                                .sendPasswordResetEmail(email: email)
+                                .then((value) {
+                              setState(() {
+                                isLoading = false;
+                              });
+                            });
+                            // ignore: use_build_context_synchronously
+                            ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 backgroundColor: Colors.green,
                                 content: Text('Reset link sent'),
                               ),
-                            ),
-                          )
-                          .then((value) => context.push('/otpScreen'));
-                    } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            e.toString(),
-                          ),
-                        ),
-                      );
-                    }
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("Invalid email, try again.")));
-                  }
-                },
-              ),
+                            );
+                            // ignore: use_build_context_synchronously
+                            context.push('/otpScreen');
+                          } on FirebaseAuthException catch (e) {
+                            setState(() {
+                              isLoading = false;
+                            });
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(e.message!),
+                              ),
+                            );
+                          }
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text("Invalid email, try again.")));
+                        }
+                      },
+                    )
+                  : ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: KColors.green300,
+                          shadowColor: Colors.transparent,
+                          fixedSize: Size(230.w, 47.h),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.r))),
+                      onPressed: () {},
+                      child: CircularProgressIndicator(color: Colors.white)),
               Gap(30.h),
               Align(
                   alignment: Alignment.bottomCenter,

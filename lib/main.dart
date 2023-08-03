@@ -23,7 +23,7 @@ class MyApp extends ConsumerWidget {
     return ScreenUtilInit(
       designSize: const Size(360, 780),
       builder: (context, child) => MaterialApp.router(
-        themeMode: ThemeMode.system,
+        themeMode: ThemeMode.light,
         theme: ThemeData(
           brightness: Brightness.light,
           fontFamily: 'Sen',

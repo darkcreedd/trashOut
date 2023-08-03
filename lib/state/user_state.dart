@@ -7,9 +7,9 @@ class UserDetailsNotifier extends StateNotifier<AppUser> {
       : super(AppUser(
             name: 'name',
             email: 'email',
-            password: 'password',
             totalPoints: 0,
             totalDisposals: 0,
+            wasteList: [],
             redeemed: 0));
   updateUser({required AppUser user}) {
     state = user;

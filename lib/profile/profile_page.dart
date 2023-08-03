@@ -4,7 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icofont_flutter/icofont_flutter.dart';
-import 'package:trash_out/state/auth.dart';
+import 'package:trash_out/authentication/vm/login_controller.dart';
+import 'package:trash_out/providers/auth_provider.dart';
 import 'package:trash_out/utils/colors.dart';
 import 'package:trash_out/widgets/gap.dart';
 import 'package:trash_out/widgets/profile_tab.dart';
@@ -185,9 +186,15 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                 ),
                                 actions: [
                                   TextButton(
-                                    onPressed: () {
-                                      FirebaseAuthService().signOut().then(
-                                          (value) => context.go('/signIn'));
+                                    onPressed: () async {
+                                      ref
+                                          .read(
+                                              loginControllerProvider.notifier)
+                                          .signOut();
+                                      Future.delayed(
+                                              const Duration(milliseconds: 100))
+                                          .then(
+                                              (value) => context.go('/signIn'));
                                     },
                                     child: const Text(
                                       "Leave",

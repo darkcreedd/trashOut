@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -124,47 +125,36 @@ class BinRequestConfirmationPage extends StatelessWidget {
                               return AlertDialog(
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20.r)),
-                                title: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Icon(Icons.logout),
-                                    Gap(0, 10.w),
-                                    const Text(
-                                      "Logout",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
+                                title: const Text(
+                                  "Bin Ordering Successful",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Gap(20.h),
-                                    Text(
-                                      "Do you really wish to logout?",
+                                content: Container(
+                                  height: 100.w,
+                                  width: 100.w,
+                                  decoration: const BoxDecoration(
+                                    image: DecorationImage(
+                                      image: AssetImage(
+                                          "assets/icons/checked.png"),
+                                    ),
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      context.pop();
+                                    },
+                                    child: const Text(
+                                      "OK",
                                       style: TextStyle(
-                                          fontSize: 14.sp,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                  ],
-                                ),
-                                // actions: [
-
-                                //   TextButton(
-                                //     onPressed: () {
-                                //       context.pop();
-                                //     },
-                                //     child: const Text(
-                                //       "Stay",
-                                //       style: TextStyle(
-                                //           fontWeight: FontWeight.bold),
-                                //     ),
-                                //   )
-                                // ],
+                                  ),
+                                ],
                               );
-                            });
+                            }).then((value) => context.go('/profile'));
                       },
                     ),
                     SizedBox(

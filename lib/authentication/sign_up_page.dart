@@ -1,8 +1,11 @@
+import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:trash_out/authentication/vm/login_controller.dart';
 
 import 'package:trash_out/utils/colors.dart';
 import 'package:trash_out/widgets/custom_button.dart';
@@ -30,6 +33,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
 
   bool newsLetter = true;
+  bool isLoading = false;
 
   @override
   void dispose() {
@@ -118,7 +122,76 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                       ],
                     )),
                 Gap(50.h),
-                CustomButton(text: "Create Account", onPressed: () async {}),
+                (!isLoading)
+                    ? CustomButton(
+                        text: "Create Account",
+                        onPressed: () async {
+                          String username = nameController.text.trim();
+                          String email = emailController.text.trim();
+                          String password = passwordController.text;
+                          String confirmPassword =
+                              confirmPasswordController.text;
+                          bool isValid = EmailValidator.validate(email);
+                          if (email.isNotEmpty &&
+                              username.isNotEmpty &&
+                              password.isNotEmpty) {
+                            if (password == confirmPassword) {
+                              if (username.length > 6) {
+                                if (isValid) {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  await ref
+                                      .read(loginControllerProvider.notifier)
+                                      .createUser(
+                                          email: email,
+                                          password: password,
+                                          userName: username)
+                                      .then((user) {
+                                    if (user != null) {
+                                      context.go('/');
+                                    }
+                                  });
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          "Invalid email, Enter a valid email"),
+                                    ),
+                                  );
+                                }
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            "User name characters should be more than 6.")));
+                              }
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("passwords mismatch!"),
+                                ),
+                              );
+                            }
+                          } else {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text("All fields are required!"),
+                              backgroundColor: Colors.redAccent,
+                            ));
+                          }
+                        })
+                    : ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: KColors.green300,
+                            shadowColor: Colors.transparent,
+                            fixedSize: Size(230.w, 47.h),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.r))),
+                        onPressed: () {},
+                        child: const CircularProgressIndicator(
+                          color: Colors.white,
+                        )),
                 Gap(30.h),
                 GestureDetector(
                   onTap: () => context.go('/signIn'),

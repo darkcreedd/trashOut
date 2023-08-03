@@ -2,17 +2,16 @@
 class AppUser {
   final String name;
   final String email;
-  final String password;
   final int totalPoints;
   final int totalDisposals;
   final int redeemed;
-  AppUser({
-    required this.name,
-    required this.email,
-    required this.password,
-    required this.totalPoints,
-    required this.totalDisposals,
-    required this.redeemed,
-  });
+  final List wasteList;
+  AppUser(
+      {required this.name,
+      required this.email,
+      required this.totalPoints,
+      required this.totalDisposals,
+      required this.redeemed,
+      required this.wasteList});
   //*Waste details
 }

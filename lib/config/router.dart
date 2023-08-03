@@ -36,7 +36,7 @@ final router = GoRouter(
   routes: <RouteBase>[
     GoRoute(
       path: '/',
-      builder: (context, state) => const AuthChecker(),
+      builder: (context, state) => AuthChecker(),
     ),
     GoRoute(
       path: '/signIn',

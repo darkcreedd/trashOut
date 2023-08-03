@@ -1,151 +1,156 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:firebase_core/firebase_core.dart';
-// import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:trash_out/models/user_model.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: avoid_print
 
-// class Authentication {
-//   final FirebaseAuth auth = FirebaseAuth.instance;
-//   Stream<User?> get authStateChange => auth.authStateChanges();
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:trash_out/models/user_model.dart';
 
-//   String? errorMessage;
-//   // final ProviderContainer _container;
+class FirebaseAuthService extends StateNotifier<String?> {
+  FirebaseAuthService() : super(null);
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-//   // Authentication(this._container,);
+  Stream<User?> get authStateChanges => _auth.authStateChanges();
 
-//   static AppUser? appUser;
+  //** Code for creating new user **//
 
-//   Future<User?> signUpWithEmailAndPassword(
-//       {required String email,
-//       required String name,
-//       required String password}) async {
-//     try {
-//       final result = await auth.createUserWithEmailAndPassword(
-//           email: email, password: password);
-//       if (result.user != null) {
-//         await FirebaseFirestore.instance.collection('users').add({
-//           'username': name,
-//           'email': email,
-//           'address': '',
-//           'redeemed points': 0,
-//           'total disposals': 0,
-//           'total points': 0,
-//           'waste list': {
-//             {
-//               "wasteId": '258961',
-//               "id": '8965325',
-//               "wasteClass": "Medical",
-//               "wasteTypes": ["Plastic"],
-//               "date": DateTime.now(),
-//               "time": '11am - 12pm',
-//               "location": "College of Science",
-//               "points": 200
-//             }
-//           }
-//         });
+  Future<String> createUserWithEmailAndPassword(
+      {required String email,
+      required String password,
+      required String userName}) async {
+    User? user;
+    String? errorMessage;
+    try {
+      final result = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      await result.user!.updateDisplayName(userName);
 
-//         // Fetch the user data from Firestore using the user ID
-//         // final userSnapshot = await FirebaseFirestore.instance
-//         //     .collection('users')
-//         //     .doc(result.user!.uid)
-//         //     .get();
+      user = result.user!;
+      email = user.email!;
+      _firestore.collection('users').doc(user.uid).set({
+        'username': userName,
+        'email': user.email,
+        'address': '',
+        'redeemed points': 0,
+        'total disposals': 0,
+        'total points': 0,
+        'waste list': []
+      });
+    } on FirebaseAuthException catch (error) {
+      switch (error.message) {
+        case "ERROR_OPERATION_NOT_ALLOWED":
+          errorMessage = "Anonymous accounts are not enabled.";
+          break;
+        case "ERROR_WEAK_PASSWORD":
+          errorMessage = "Your password is too weak.";
+          break;
+        case "ERROR_INVALID_EMAIL":
+          errorMessage = "Your email is invalid.";
+          break;
+        case "ERROR_EMAIL_ALREADY_IN_USE":
+          errorMessage = "Email is already in use on different account.";
+          break;
+        case "ERROR_INVALID_CREDENTIAL":
+          errorMessage = "Your email is invalid.";
+          break;
 
-//         // if (userSnapshot.exists) {
-//         //   // If the user document exists, create a User instance from the data
-//         //   appUser = AppUser(
-//         //     name: userSnapshot.data()?['first name'],
-//         //     email: userSnapshot.data()?['email'],
-//         //     password: '',
-//         //     redeemed: userSnapshot.data()?['redeemed points'],
-//         //     totalDisposals: userSnapshot.data()?['total disposals'],
-//         //     totalPoints: userSnapshot.data()?['total points'],
-//         //     //Todo: waste list
-//         //     // Add other properties as needed based on your User class
-//         //   );
-//         // _container.read(userDetailsNotifierProvider.notifier).updateUser(
-//         //     user: appUser ??
-//         //         AppUser(
-//         //             name: name,
-//         //             email: email,
-//         //             password: password,
-//         //             totalPoints: 0,
-//         //             totalDisposals: 0,
-//         //             redeemed: 0));
-//         // } else {
-//         //   // Document doesn't exist, handle error or set appUser to null
-//         //   appUser = AppUser(
-//         //       name: name,
-//         //       email: email,
-//         //       password: password,
-//         //       totalPoints: 0,
-//         //       totalDisposals: 0,
-//         //       redeemed: 0);
-//         // }
-//       }
-//       return result.user;
-//     } on FirebaseAuthException catch (error) {
-//       error.message;
-//     }
-//     return null;
-//   }
+        default:
+          errorMessage = "An undefined Error happened.";
+      }
+    }
+    if (errorMessage != null) {
+      return Future.error(errorMessage);
+    }
+    fetchAndStoreUserData(user!.uid);
 
-//   Future<User?> signInWithEmailAndPassword(
-//       {required String email, required String password}) async {
-//     try {
-//       final result = await auth.signInWithEmailAndPassword(
-//           email: email, password: password);
-//       // final userSnapshot = await FirebaseFirestore.instance
-//       //     .collection('users')
-//       //     .doc(result.user!.uid)
-//       //     .get();
+    return user.uid;
+  }
 
-//       // if (userSnapshot.exists) {
-//       //   // If the user document exists, create a User instance from the data
-//       //   appUser = AppUser(
-//       //     name: userSnapshot.data()?['username'],
-//       //     email: userSnapshot.data()?['email'],
-//       //     password: '',
-//       //     redeemed: userSnapshot.data()?['redeemed points'],
-//       //     totalDisposals: userSnapshot.data()?['total disposals'],
-//       //     totalPoints: userSnapshot.data()?['total points'],
-//       //     //Todo: waste list
-//       //     // Add other properties as needed based on your User class
-//       //   );
-//       //   print('appuser --- ${appUser!.email}');
-//       // } else {
-//       //   // Document doesn't exist, handle error or set appUser to null
-//       //   appUser = AppUser(
-//       //       name: 'no user-name',
-//       //       email: email,
-//       //       password: password,
-//       //       totalPoints: 0,
-//       //       totalDisposals: 0,
-//       //       redeemed: 0);
-//       // }
-//       return result.user;
-//     } on FirebaseAuthException catch (e) {
-//       e.message;
-//     }
-//     return null;
-//   }
+  Future<String> signUserInWithEmailAndPassword(
+      {required String email, required String password}) async {
+    User? user;
+    String? errorMessage;
 
-//   Future<void> signOut() async {
-//     try {
-//       auth.signOut();
-//     } on FirebaseAuthException catch (e) {
-//       e.message;
-//     }
-//   }
-// }
+    final result = await _auth.signInWithEmailAndPassword(
+        email: email, password: password);
+    user = result.user;
+    return '';
+  }
 
-// final authenticationProvider = Provider<Authentication>((ref) {
-//   return Authentication();
-// });
+  final userDataProvider = StateProvider<Map<String, dynamic>?>((ref) => null);
 
-// final authStateProvider = StreamProvider<User?>((ref) {
-//   return ref.read(authenticationProvider).authStateChange;
-// });
+  Future<void> fetchAndStoreUserData(String userId) async {
+    try {
+      final DocumentSnapshot snapshot =
+          await _firestore.collection('users').doc(userId).get();
+      if (snapshot.exists) {
+        final userData = snapshot.data() as Map<String, dynamic>;
 
-// final initialiseFirebaseProvider = FutureProvider<FirebaseApp>((ref) async {
-//   return await Firebase.initializeApp();
-// });
+        // Assuming you have an AppUser instance
+        AppUser appUser = AppUser(
+            name: userData['name'],
+            email: userData['email'],
+            totalPoints: userData['total_points'],
+            redeemed: userData['redeemed_points'],
+            totalDisposals: userData['total_disposals'],
+            wasteList: userData['waste_list']);
+      } else {
+        print('User data not found in Firestore for user ID: $userId');
+      }
+    } catch (e) {
+      print('Error fetching user data from Firestore: $e');
+    }
+  }
+
+  passwordReset({required String email}) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+    }
+  }
+
+  Future<void> signOut() async {
+    try {
+      await _auth.signOut();
+    } on FirebaseAuthException catch (e) {
+      print('Error signing out: ${e.message}');
+    }
+  }
+}
+
+//**Providers */
+
+// Riverpod provider for FirebaseAuthService.
+final firebaseAuthServiceProvider =
+    StateProvider<FirebaseAuthService>((ref) => FirebaseAuthService());
+
+final authStateProvider = StreamProvider<User?>((ref) {
+  return ref.read(firebaseAuthServiceProvider).authStateChanges;
+});
+
+class UserDataProvider extends StateNotifier<UserData?> {
+  UserDataProvider() : super(null);
+
+  void setUserData(UserData userData) {
+    state = userData;
+  }
+
+  void clearUserData() {
+    state = null;
+  }
+}
+
+final userDataProvider = StateProvider((ref) {
+  return ref
+      .read(firebaseAuthServiceProvider)
+      .fetchAndStoreUserData(FirebaseAuth.instance.currentUser!.uid);
+});
+
+class UserData {
+  String uid;
+  // Add other properties related to user data that you want to track
+
+  UserData(this.uid);
+}

@@ -48,6 +48,7 @@ dependencies:
   email_validator: ^2.1.17
   icofont_flutter: ^1.4.0
   image_picker: ^1.0.1
+  equatable: ^2.0.5
 
 dev_dependencies:
   flutter_test:
