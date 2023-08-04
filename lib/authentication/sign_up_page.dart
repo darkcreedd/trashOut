@@ -23,6 +23,7 @@ class SignUpPage extends ConsumerStatefulWidget {
 
 class _SignUpPageState extends ConsumerState<SignUpPage> {
   final TextEditingController nameController = TextEditingController();
+  final TextEditingController mobileNumberController = TextEditingController();
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -34,11 +35,27 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
 
   bool newsLetter = true;
   bool isLoading = false;
+  String? validateGhanaMobileNumber(String? value) {
+    final RegExp regex = RegExp(r'^\+?233\d{9}$');
+
+    if (value == null || value.isEmpty) {
+      return 'Mobile number is required';
+    }
+
+    if (!regex.hasMatch(value)) {
+      return 'Please enter a valid Ghanaian mobile number';
+    }
+
+    return null;
+  }
 
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
+    confirmPasswordController.dispose();
+    mobileNumberController.dispose();
+    nameController.dispose();
     super.dispose();
   }
 
@@ -78,6 +95,11 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   label: "Username",
                   controller: nameController,
                 ),
+                Gap(15.h),
+                CustomTextField(
+                    controller: mobileNumberController,
+                    icon: Icons.phone,
+                    label: 'Mobile Number(+233 000 000 000)'),
                 Gap(15.h),
                 CustomEmailField(
                   icon: MdiIcons.email,
@@ -128,30 +150,44 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                         onPressed: () async {
                           String username = nameController.text.trim();
                           String email = emailController.text.trim();
+                          String mobileNumber = mobileNumberController.text;
+
                           String password = passwordController.text;
                           String confirmPassword =
                               confirmPasswordController.text;
                           bool isValid = EmailValidator.validate(email);
+                          String? mobileNumberError =
+                              validateGhanaMobileNumber(mobileNumber);
                           if (email.isNotEmpty &&
                               username.isNotEmpty &&
                               password.isNotEmpty) {
                             if (password == confirmPassword) {
                               if (username.length > 6) {
                                 if (isValid) {
-                                  setState(() {
-                                    isLoading = true;
-                                  });
-                                  await ref
-                                      .read(loginControllerProvider.notifier)
-                                      .createUser(
-                                          email: email,
-                                          password: password,
-                                          userName: username)
-                                      .then((user) {
-                                    if (user != null) {
-                                      context.go('/');
-                                    }
-                                  });
+                                  if (mobileNumberError == null) {
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+                                    await ref
+                                        .read(loginControllerProvider.notifier)
+                                        .createUser(
+                                            mobileNumber:
+                                                mobileNumberController.text,
+                                            email: email,
+                                            password: password,
+                                            userName: username)
+                                        .then((user) {
+                                      if (user != null) {
+                                        context.go('/');
+                                      }
+                                    });
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(mobileNumberError),
+                                      ),
+                                    );
+                                  }
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(

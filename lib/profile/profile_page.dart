@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -43,22 +44,27 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircleAvatar(
-                    radius: 35.r,
-                  ),
+                  (FirebaseAuth.instance.currentUser!.photoURL != null)
+                      ? CircleAvatar(
+                          radius: 50,
+                          backgroundImage: CachedNetworkImageProvider(
+                              FirebaseAuth.instance.currentUser!.photoURL!),
+                        )
+                      : CircleAvatar(
+                          backgroundColor: Colors.black,
+                          radius: 50,
+                          child: Image.asset(
+                              fit: BoxFit.fill,
+                              'assets/images/user-avatar.png'), // Use the correct asset path
+                        ),
                   Gap(10.h),
                   // Text(user.email),
                   Text(FirebaseAuth.instance.currentUser!.email!),
 
-                  const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.location_on_outlined),
-                      Text("College of Science, KNUST"),
-                    ],
-                  ),
+                  Gap(10.h),
+
                   GestureDetector(
-                    onTap: () => context.go('/account'),
+                    onTap: () => context.push('/account'),
                     child: Container(
                       height: 40,
                       width: 130,

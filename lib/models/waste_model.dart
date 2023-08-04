@@ -1,5 +1,4 @@
 class Waste {
-  final String id;
   final String wasteId;
   final String wasteClass;
   final List<String> wasteTypes;
@@ -11,7 +10,6 @@ class Waste {
   final int points;
   Waste({
     required this.wasteId,
-    required this.id,
     required this.wasteClass,
     required this.wasteTypes,
     this.imagePath,

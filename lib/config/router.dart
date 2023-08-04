@@ -19,8 +19,7 @@ import 'package:trash_out/bin_request/request_bin.dart';
 import 'package:trash_out/dashboard/default_page.dart';
 import 'package:trash_out/dashboard/home_page.dart';
 import 'package:trash_out/dashboard/pickups_page.dart';
-import 'package:trash_out/map/select_address_map_page.dart';
-import 'package:trash_out/notification/notification_page.dart';
+import 'package:trash_out/Notifcations/notifications_page.dart';
 import 'package:trash_out/pickup_scheduling/domestic_waste_specification_page.dart';
 import 'package:trash_out/pickup_scheduling/industrial_waste_specification_page.dart';
 import 'package:trash_out/pickup_scheduling/medical_waste_specification_page.dart';
@@ -36,7 +35,7 @@ final router = GoRouter(
   routes: <RouteBase>[
     GoRoute(
       path: '/',
-      builder: (context, state) => AuthChecker(),
+      builder: (context, state) => const AuthChecker(),
     ),
     GoRoute(
       path: '/signIn',
@@ -153,7 +152,7 @@ final router = GoRouter(
             // each routes with its sub routes if available e.g shope/uuid/details
             GoRoute(
               path: '/maps',
-              builder: (context, state) => const SelectAddressMapPage(),
+              builder: (context, state) => const NotificationsPage(),
             ),
           ],
         ),

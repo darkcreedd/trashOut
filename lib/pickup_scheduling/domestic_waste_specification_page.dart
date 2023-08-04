@@ -11,7 +11,7 @@ import 'package:trash_out/widgets/custom_button.dart';
 import 'package:trash_out/widgets/gap.dart';
 import 'package:trash_out/widgets/waste_type_tab.dart';
 
-import 'state.dart';
+import '../state/state.dart';
 
 class DomesticWasteSpecificationPage extends ConsumerStatefulWidget {
   const DomesticWasteSpecificationPage({super.key});

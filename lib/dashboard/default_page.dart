@@ -1,61 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:icofont_flutter/icofont_flutter.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import 'package:go_router/go_router.dart';
-
-// PageController pageController = PageController();
-
-// class DefaultPage extends StatefulWidget {
-//   const DefaultPage({super.key});
-
-//   @override
-//   State<DefaultPage> createState() => _DefaultPageState();
-// }
-
-// class _DefaultPageState extends State<DefaultPage> {
-//   int currentPage = 0;
-//   List<Widget> body = const [
-//     HomePage(),
-//     PickupsPage(),
-//     SelectAddressMapPage(),
-//     ProfilePage(),
-//   ];
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: body[currentPage],
-//       bottomNavigationBar: BottomNavigationBar(
-//           elevation: 10,
-//           currentIndex: currentPage,
-//           selectedItemColor: Colors.black,
-//           unselectedItemColor: Colors.grey,
-//           type: BottomNavigationBarType.fixed,
-//           onTap: (value) {
-//             setState(() {
-//               currentPage = value;
-//             });
-//           },
-//           items: [
-//             //ToDO: Use one tab for notification if available
-//             const BottomNavigationBarItem(
-//                 icon: ImageIcon(AssetImage("assets/icons/home_icon.png")),
-//                 label: 'Home'),
-//             BottomNavigationBarItem(
-//                 icon: ImageIcon(
-//                   const AssetImage("assets/icons/garbage_truck.png"),
-//                   size: 30.sp,
-//                 ),
-//                 label: 'Pickups'),
-//             BottomNavigationBarItem(
-//                 icon: Icon(MdiIcons.googleMaps), label: 'Maps'),
-//             const BottomNavigationBarItem(
-//                 icon: Icon(IcoFontIcons.user), label: 'Profile'),
-//           ]),
-//     );
-//   }
-// }
 
 class ScaffoldWithNavbar extends StatelessWidget {
   const ScaffoldWithNavbar(this.navigationShell, {super.key});
@@ -84,8 +31,8 @@ class ScaffoldWithNavbar extends StatelessWidget {
                 size: 30.sp,
               ),
               label: 'Pickups'),
-          BottomNavigationBarItem(
-              icon: Icon(MdiIcons.googleMaps), label: 'Maps'),
+          const BottomNavigationBarItem(
+              icon: Icon(Icons.notifications_active), label: 'Alerts'),
           const BottomNavigationBarItem(
               icon: Icon(IcoFontIcons.user), label: 'Profile'),
         ],

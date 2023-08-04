@@ -48,7 +48,8 @@ class AuthRepository {
   Future<User?> registerUserWithEmailAndPassword(
       {required String email,
       required String password,
-      required String userName}) async {
+      required String userName,
+      required String mobileNumber}) async {
     try {
       User? user;
 
@@ -60,9 +61,11 @@ class AuthRepository {
 
       user = result.user!;
       email = user.email!;
+
       _firestore.collection('users').doc(user.uid).set({
         'username': userName,
         'email': email,
+        'mobileNumber': mobileNumber,
         'address': '',
         'redeemed points': 0,
         'total disposals': 0,
@@ -80,6 +83,7 @@ class AuthRepository {
           }
         ]
       });
+
       return result.user;
     } on FirebaseException catch (e) {
       switch (e.code) {
@@ -107,6 +111,34 @@ class AuthRepository {
         default:
           throw AuthException("Login failed. Please try again.");
       }
+    }
+  }
+
+  Future<Map<String, dynamic>> getUserBasicInfo(String userId) async {
+    try {
+      final userDoc = await _firestore.collection('users').doc(userId).get();
+      if (userDoc.exists) {
+        final userData = userDoc.data();
+        if (userData != null) {
+          return {
+            'username': userData['username'] as String?,
+            'email': userData['email'] as String?,
+            'mobileNumber': userData['mobileNumber'] as String?,
+          };
+        }
+      }
+      return {
+        'username': null,
+        'email': null,
+        'mobileNumber': null,
+      };
+    } catch (e) {
+      print('Error fetching user data: $e');
+      return {
+        'username': null,
+        'email': null,
+        'mobileNumber': null,
+      };
     }
   }
 

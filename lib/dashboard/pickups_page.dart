@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:trash_out/pickup_scheduling/state.dart';
+import 'package:trash_out/state/state.dart';
 import 'package:trash_out/state/waste_points_state.dart';
 
 import 'package:trash_out/utils/colors.dart';
@@ -31,11 +31,19 @@ class _PickupsPageState extends ConsumerState<PickupsPage> {
   @override
   Widget build(BuildContext context) {
     var mediaQ = MediaQuery.sizeOf(context);
-    final totalList = ref.watch(wasteListProvider);
     final completedList = ref.watch(completedWasteProvider);
     final pendingList = ref.watch(pendingWasteProvider);
     final totalPoints = ref.watch(wastePointsProvider);
     final redeemedPoints = ref.watch(redeemedPointsProvider);
+    final stats = ref.watch(statsProvider);
+
+    final plasticCount = stats[0];
+    final metalCount = stats[1];
+    final organicCount = stats[2];
+    final glassCount = stats[3];
+    final ewasteCount = stats[4];
+    final othersCount = stats[5];
+    // final
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
@@ -67,10 +75,15 @@ class _PickupsPageState extends ConsumerState<PickupsPage> {
                       icon: MdiIcons.trashCan,
                       points: completedList.length,
                       caption: "Total Disposals"),
-                  DashBoardItem(
-                      icon: MdiIcons.giftOutline,
-                      points: redeemedPoints,
-                      caption: "Redeemed"),
+                  GestureDetector(
+                    onTap: () {
+                      //todo::
+                    },
+                    child: DashBoardItem(
+                        icon: MdiIcons.giftOutline,
+                        points: redeemedPoints,
+                        caption: "Redeemed"),
+                  ),
                 ],
               ),
             ),
@@ -117,7 +130,20 @@ class _PickupsPageState extends ConsumerState<PickupsPage> {
                                         fontSize: 15.sp),
                                   ),
                                   Gap(10.h),
-                                  CustomPieChart(dataMap: dataMap),
+                                  CustomPieChart(dataMap: {
+                                    "Plastic":
+                                        double.parse(plasticCount.toString()),
+                                    "Metal":
+                                        double.parse(metalCount.toString()),
+                                    "Organic":
+                                        double.parse(organicCount.toString()),
+                                    "Glass":
+                                        double.parse(glassCount.toString()),
+                                    "E-waste":
+                                        double.parse(ewasteCount.toString()),
+                                    "Others":
+                                        double.parse(othersCount.toString()),
+                                  }),
                                   Gap(30.h),
                                 ]),
                           ),
@@ -136,7 +162,7 @@ class _PickupsPageState extends ConsumerState<PickupsPage> {
                             ),
                           ),
                           Visibility(
-                            visible: (totalList.isNotEmpty),
+                            visible: (completedList.isNotEmpty),
                             replacement: const Center(
                                 child: Text("You have no disposal records")),
                             child: ListView.builder(

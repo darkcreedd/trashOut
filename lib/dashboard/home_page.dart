@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,14 +10,14 @@ import 'package:icofont_flutter/icofont_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:responsive_grid/responsive_grid.dart';
+import 'package:trash_out/providers/auth_provider.dart';
 
-import 'package:trash_out/pickup_scheduling/state.dart';
+import 'package:trash_out/state/state.dart';
 
 import 'package:trash_out/utils/colors.dart';
 import 'package:trash_out/widgets/dashboard_item.dart';
 import 'package:trash_out/widgets/gap.dart';
 
-import '../state/user_state.dart';
 import '../state/waste_points_state.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -28,14 +29,18 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   @override
+  void initState() {
+    super.initState();
+    ref.read(wasteListProvider.notifier).updateState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var mediaQ = MediaQuery.sizeOf(context);
     final totalDisposals = ref.watch(completedWasteProvider);
     final totalPoints = ref.watch(wastePointsProvider);
     final redeemedPoints = ref.watch(redeemedPointsProvider);
-
-    final user = ref.watch(userDetailsNotifierProvider);
-
+    final profilePicture = ref.watch(userProfilePictureProvider);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -53,12 +58,23 @@ class _HomePageState extends ConsumerState<HomePage> {
                     child: Row(
                       children: [
                         GestureDetector(
-                          onTap: () => context.go('/profile'),
-                          child: CircleAvatar(
-                            radius: 30.r,
-                            backgroundColor: Colors.black,
-                          ),
-                        ),
+                            onTap: () => context.go('/profile'),
+                            child: (FirebaseAuth
+                                        .instance.currentUser!.photoURL !=
+                                    null)
+                                ? CircleAvatar(
+                                    radius: 30,
+                                    backgroundImage: CachedNetworkImageProvider(
+                                        FirebaseAuth
+                                            .instance.currentUser!.photoURL!),
+                                  )
+                                : CircleAvatar(
+                                    backgroundColor: Colors.black,
+                                    radius: 30,
+                                    child: Image.asset(
+                                        fit: BoxFit.fill,
+                                        'assets/images/user-avatar.png'), // Use the correct asset path
+                                  )),
                         Gap(0, 10.w),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

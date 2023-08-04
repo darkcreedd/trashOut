@@ -27,13 +27,17 @@ class LoginController extends StateNotifier<LoginState> {
   Future<User?> createUser(
       {required String email,
       required String password,
-      required String userName}) async {
+      required String userName,
+      required String mobileNumber}) async {
     state = const LoginStateLoading();
     try {
       final result = await ref
           .read(authRepositoryProvider)
           .registerUserWithEmailAndPassword(
-              email: email, password: password, userName: userName);
+              mobileNumber: mobileNumber,
+              email: email,
+              password: password,
+              userName: userName);
       state = const LoginStateSuccess();
       return result;
     } catch (e) {

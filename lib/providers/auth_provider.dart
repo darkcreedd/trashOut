@@ -9,3 +9,16 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
 final authStateProvider = StreamProvider<User?>((ref) {
   return ref.read(authRepositoryProvider).authStateChange;
 });
+
+class UserProfilePictureNotifier extends StateNotifier<String?> {
+  UserProfilePictureNotifier() : super(null);
+
+  void updateProfilePicture(String newImageUrl) {
+    state = newImageUrl;
+  }
+}
+
+final userProfilePictureProvider =
+    StateNotifierProvider<UserProfilePictureNotifier, String?>((ref) {
+  return UserProfilePictureNotifier();
+});
