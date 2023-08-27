@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +34,9 @@ class _HomePageState extends ConsumerState<HomePage> {
   void initState() {
     super.initState();
     ref.read(wasteListProvider.notifier).updateState();
+    Timer.periodic(const Duration(minutes: 5), (timer) {
+      ref.read(wasteListProvider.notifier).updateState();
+    });
   }
 
   @override

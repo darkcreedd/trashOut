@@ -95,7 +95,7 @@ class _PickupScheduleConfirmationPageState
                               return null; // Return null when input is valid
                             },
                             decoration: const InputDecoration(
-                                hintText: 'Enter your GPS code(A0-K448-1234)'),
+                                hintText: 'Enter your GPS code(AO -K448-1234)'),
                           ),
                         )
                       ],
@@ -229,6 +229,10 @@ class _PickupScheduleConfirmationPageState
                     text: "Confirm Schedule",
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                backgroundColor: Colors.blue,
+                                content: Text("Adding to Waste Schedules")));
                         ref.read(wasteListProvider.notifier).addWaste(
                             wasteClass: wasteClass,
                             wasteTypes: wasteType.wasteTypes!,
@@ -237,6 +241,11 @@ class _PickupScheduleConfirmationPageState
                             status: 'Pending',
                             location: addressController.text,
                             points: 20);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                backgroundColor: Colors.green,
+                                content: Text("Success")));
+
                         print(
                             'Updated wasteList: ${ref.watch(wasteListProvider)}');
                         context.go('/home');

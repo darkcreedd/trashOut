@@ -20,6 +20,11 @@ class WasteNotifier extends StateNotifier<List<Waste>> {
         .getWasteListForUser(FirebaseAuth.instance.currentUser!.uid);
   }
 
+  void updateList() async {
+    state = await FirestoreService()
+        .getWasteListForUser(FirebaseAuth.instance.currentUser!.uid);
+  }
+
   void addWaste({
     required String wasteClass,
     required List<String> wasteTypes,
@@ -203,3 +208,16 @@ final statsProvider = Provider<List<int>>((ref) {
 
   return [plastic, metal, organic, glass, ewaste, others, total];
 });
+
+final gpsAddressProvider =
+    StateNotifierProvider<WasteDateTimeNotifier, WasteDateTime>(
+  (ref) => WasteDateTimeNotifier(),
+);
+
+class GPSAddressNotifier extends StateNotifier<String> {
+  GPSAddressNotifier() : super('');
+
+  void update(String address) {
+    state = address;
+  }
+}

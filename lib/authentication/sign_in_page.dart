@@ -1,6 +1,5 @@
 // ignore_for_file: unused_field
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,8 +14,6 @@ import 'package:trash_out/widgets/custom_button.dart';
 import 'package:trash_out/widgets/custom_password_field.dart';
 import 'package:trash_out/widgets/custom_email_field.dart';
 import 'package:trash_out/widgets/gap.dart';
-
-import '../state/firebase_authentication.dart';
 
 class SignInPage extends ConsumerStatefulWidget {
   const SignInPage({super.key});

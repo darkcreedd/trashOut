@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icofont_flutter/icofont_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:trash_out/utils/colors.dart';
 import 'package:trash_out/widgets/custom_button.dart';
@@ -46,6 +47,11 @@ class _IndustrialWasteSpecificationPageState
     return types;
   }
 
+  final ImagePicker picker = ImagePicker();
+  bool isPicked = false;
+
+  List<XFile?>? images;
+
   @override
   Widget build(BuildContext context) {
     var mediaQ = MediaQuery.sizeOf(context);
@@ -77,13 +83,12 @@ class _IndustrialWasteSpecificationPageState
                   borderRadius: BorderRadius.circular(20.r),
                 ),
                 child: SizedBox(
-                  height: mediaQ.height * 0.2 - 50,
-                  width: mediaQ.width * 0.7,
-                  child: Image.asset(
-                    "assets/images/industry.png",
-                    fit: BoxFit.contain,
-                  ),
-                ),
+                    height: mediaQ.height * 0.2 - 50,
+                    width: mediaQ.width * 0.7,
+                    child: Image.asset(
+                      "assets/images/industry.png",
+                      fit: BoxFit.contain,
+                    )),
               ),
               Gap(15.h),
               Text(
@@ -155,18 +160,59 @@ class _IndustrialWasteSpecificationPageState
                   ),
                 ],
               ),
-              const Text("Upload Photo Instead"),
+              (!isPicked)
+                  ? const Text("Upload Photo (Optional)")
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text("Photo Uploaded"),
+                        TextButton(
+                            onPressed: () {
+                              setState(() {
+                                images = [];
+                                ref.read(imagesProvider.notifier).clearImages();
+                                isPicked = false;
+                              });
+                            },
+                            child: const Text(
+                              "Clear",
+                              style: TextStyle(color: Colors.red),
+                            ))
+                      ],
+                    ),
               Gap(10.h),
               IconButton(
-                splashRadius: 25.sp,
-                icon: const Icon(Icons.camera_alt),
-                onPressed: () {},
+                icon: (!isPicked)
+                    ? Icon(
+                        color: KColors.green100,
+                        Icons.add_photo_alternate,
+                        size: 30.sp,
+                      )
+                    : Icon(
+                        color: Colors.black,
+                        IcoFontIcons.tickMark,
+                        size: 30.sp,
+                      ),
+                onPressed: () async {
+                  ref.read(imagesProvider.notifier).clearImages();
+                  images = await picker.pickMultiImage().then((images) {
+                    if (images.isNotEmpty) {
+                      ref.read(imagesProvider.notifier).addImages(images);
+                      print(images);
+                      setState(() {
+                        isPicked = true;
+                      });
+                    }
+                    return null;
+                  });
+                },
               ),
-              Gap(10.h),
+              Gap(0, 20.w),
               CustomButton(
                   text: "Proceed to Schedule",
                   onPressed: () {
                     if (indexes.isNotEmpty) {
+                      print(images.toString());
                       List<String> selectedTypes = tx();
                       ref
                           .read(wasteTypesProvider.notifier)

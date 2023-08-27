@@ -38,7 +38,6 @@ class MyApp extends ConsumerWidget {
             ),
           ),
         ),
-        darkTheme: ThemeData(brightness: Brightness.dark),
         debugShowCheckedModeBanner: false,
         routerConfig: RouterConfig(
             routerDelegate: router.routerDelegate,

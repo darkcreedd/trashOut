@@ -176,6 +176,11 @@ class AccountPage extends ConsumerStatefulWidget {
 class _AccountPageState extends ConsumerState<AccountPage> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -385,7 +390,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                                   }
                                   return null;
                                 },
-                                controller: usernameController,
+                                controller: emailController,
                                 cursorColor: KColors.green300,
                                 decoration: InputDecoration(
                                   errorBorder: OutlineInputBorder(
@@ -417,23 +422,26 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                             CustomButton(
                               text: "Save",
                               onPressed: () async {
-                                if (_formKey.currentState!.validate()) {
-                                  // Valid form, proceed with saving
-                                  String userName =
-                                      usernameController.text.trim();
-                                  String email = emailController.text.trim();
+                                // Valid form, proceed with saving
+                                String userName =
+                                    usernameController.text.trim();
+                                String email = emailController.text.trim();
 
+                                if (usernameController.text.isNotEmpty) {
                                   // Update user display name
                                   await FirebaseAuth.instance.currentUser!
                                       .updateDisplayName(userName)
-                                      .then((value) => ScaffoldMessenger.of(
-                                              context)
-                                          .showSnackBar(const SnackBar(
-                                              backgroundColor: Colors.green,
-                                              content:
-                                                  Text('Username updated'))));
+                                      .then((value) {
+                                    setState(() {});
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            backgroundColor: Colors.green,
+                                            content: Text('Username updated')));
+                                  });
+                                }
 
-                                  // Update user email
+                                // Update user email
+                                if (emailController.text.isNotEmpty) {
                                   await FirebaseAuth.instance.currentUser!
                                       .updateEmail(email)
                                       .then((value) => ScaffoldMessenger.of(
