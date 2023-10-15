@@ -1,28 +1,28 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icofont_flutter/icofont_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import 'package:trash_out/utils/colors.dart';
 import 'package:trash_out/widgets/custom_button.dart';
 import 'package:trash_out/widgets/gap.dart';
 import 'package:trash_out/widgets/waste_type_tab.dart';
 
-import '../state/state.dart';
+import '../../state/state.dart';
 
-class MedicalWasteSpecificationPage extends ConsumerStatefulWidget {
-  const MedicalWasteSpecificationPage({super.key});
+class DomesticWasteSpecificationPage extends ConsumerStatefulWidget {
+  const DomesticWasteSpecificationPage({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      _MedicalWasteSpecificationPageState();
+      _DomesticWasteSpecificationPageState();
 }
 
-class _MedicalWasteSpecificationPageState
-    extends ConsumerState<MedicalWasteSpecificationPage> {
+class _DomesticWasteSpecificationPageState
+    extends ConsumerState<DomesticWasteSpecificationPage> {
   List indexes = [];
   List<String> tx() {
     List<String> types = [];
@@ -30,22 +30,25 @@ class _MedicalWasteSpecificationPageState
     for (final i in indexes) {
       switch (i) {
         case 0:
-          types.add('Infectious');
+          types.add('Plastic');
           break;
         case 1:
-          types.add('Pathological');
+          types.add('Food waste');
           break;
         case 2:
-          types.add('Drugs');
+          types.add('Paper');
           break;
         case 3:
-          types.add('Sharps');
+          types.add('Textile');
           break;
         case 4:
-          types.add('Chemical');
+          types.add('Glass');
           break;
         case 5:
-          types.add('Anatomy');
+          types.add('Furniture');
+          break;
+        case 6:
+          types.add('E-waste');
           break;
         default:
       }
@@ -70,7 +73,7 @@ class _MedicalWasteSpecificationPageState
               color: Colors.black,
             )),
         title: const Text(
-          "Medical Waste",
+          "Domestic Waste",
           style: TextStyle(fontFamily: 'Sen'),
         ),
       ),
@@ -91,7 +94,7 @@ class _MedicalWasteSpecificationPageState
                     height: mediaQ.height * 0.2 - 50,
                     width: mediaQ.width * 0.7,
                     child: Image.asset(
-                      "assets/images/medical3.png",
+                      "assets/images/domestic.png",
                       fit: BoxFit.contain,
                     )),
               ),
@@ -111,27 +114,28 @@ class _MedicalWasteSpecificationPageState
                             : indexes.add(0);
                       });
                     },
-                    child: WasteTypeTab(
+                    child: WasteTypeTab1(
                         color: (indexes.contains(0))
                             ? KColors.green100
                             : KColors.grey,
-                        icon: MdiIcons.faceMaskOutline,
-                        label: "Infectious"),
+                        icon: "assets/icons/plastic.png",
+                        label: "Plastic"),
                   ),
                   GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          (indexes.contains(1))
-                              ? indexes.remove(1)
-                              : indexes.add(1);
-                        });
-                      },
-                      child: WasteTypeTab(
-                          color: (indexes.contains(1))
-                              ? KColors.green100
-                              : KColors.grey,
-                          icon: MdiIcons.microscope,
-                          label: "Pathological")),
+                    onTap: () {
+                      setState(() {
+                        (indexes.contains(1))
+                            ? indexes.remove(1)
+                            : indexes.add(1);
+                      });
+                    },
+                    child: WasteTypeTab1(
+                        color: (indexes.contains(1))
+                            ? KColors.green100
+                            : KColors.grey,
+                        icon: "assets/icons/organic.png",
+                        label: "Food waste"),
+                  ),
                   GestureDetector(
                     onTap: () {
                       setState(() {
@@ -144,8 +148,8 @@ class _MedicalWasteSpecificationPageState
                         color: (indexes.contains(2))
                             ? KColors.green100
                             : KColors.grey,
-                        icon: "assets/icons/body_fluid.png",
-                        label: "Drugs"),
+                        icon: "assets/icons/paper_icon.png",
+                        label: "Paper"),
                   ),
                   GestureDetector(
                     onTap: () {
@@ -155,12 +159,12 @@ class _MedicalWasteSpecificationPageState
                             : indexes.add(3);
                       });
                     },
-                    child: WasteTypeTab(
+                    child: WasteTypeTab1(
                         color: (indexes.contains(3))
                             ? KColors.green100
                             : KColors.grey,
-                        icon: IcoFontIcons.injectionSyringe,
-                        label: "Sharps"),
+                        icon: "assets/icons/shirt_icon.png",
+                        label: "Textile"),
                   ),
                   GestureDetector(
                     onTap: () {
@@ -170,12 +174,12 @@ class _MedicalWasteSpecificationPageState
                             : indexes.add(4);
                       });
                     },
-                    child: WasteTypeTab(
+                    child: WasteTypeTab1(
                         color: (indexes.contains(4))
                             ? KColors.green100
                             : KColors.grey,
-                        icon: IcoFontIcons.testTubeAlt,
-                        label: "Chemical"),
+                        icon: "assets/icons/broken_glass.png",
+                        label: "Glass"),
                   ),
                   GestureDetector(
                     onTap: () {
@@ -185,12 +189,27 @@ class _MedicalWasteSpecificationPageState
                             : indexes.add(5);
                       });
                     },
-                    child: WasteTypeTab(
+                    child: WasteTypeTab1(
                         color: (indexes.contains(5))
                             ? KColors.green100
                             : KColors.grey,
-                        icon: MdiIcons.heartPulse,
-                        label: "Anatomy"),
+                        icon: "assets/icons/wood.png",
+                        label: "Furniture"),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        (indexes.contains(6))
+                            ? indexes.remove(6)
+                            : indexes.add(6);
+                      });
+                    },
+                    child: WasteTypeTab(
+                        color: (indexes.contains(6))
+                            ? KColors.green100
+                            : KColors.grey,
+                        icon: IcoFontIcons.microChip,
+                        label: "E-waste"),
                   ),
                 ],
               ),
@@ -241,7 +260,7 @@ class _MedicalWasteSpecificationPageState
                   });
                 },
               ),
-              Gap(10.h),
+              Gap(0, 20.w),
               CustomButton(
                   text: "Proceed to Schedule",
                   onPressed: () {

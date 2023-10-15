@@ -163,8 +163,8 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 
-import '../providers/auth_provider.dart';
-import '../utils/colors.dart';
+import '../../providers/auth_provider.dart';
+import '../../utils/colors.dart';
 
 class AccountPage extends ConsumerStatefulWidget {
   const AccountPage({Key? key}) : super(key: key);
@@ -176,11 +176,6 @@ class AccountPage extends ConsumerStatefulWidget {
 class _AccountPageState extends ConsumerState<AccountPage> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
 
   @override
   void dispose() {

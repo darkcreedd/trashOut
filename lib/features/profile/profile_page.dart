@@ -6,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icofont_flutter/icofont_flutter.dart';
 import 'package:trash_out/authentication/vm/login_controller.dart';
-import 'package:trash_out/providers/auth_provider.dart';
 import 'package:trash_out/utils/colors.dart';
 import 'package:trash_out/widgets/gap.dart';
 import 'package:trash_out/widgets/profile_tab.dart';

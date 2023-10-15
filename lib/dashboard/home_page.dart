@@ -12,7 +12,6 @@ import 'package:icofont_flutter/icofont_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:responsive_grid/responsive_grid.dart';
-import 'package:trash_out/providers/auth_provider.dart';
 
 import 'package:trash_out/state/state.dart';
 
@@ -45,7 +44,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     final totalDisposals = ref.watch(completedWasteProvider);
     final totalPoints = ref.watch(wastePointsProvider);
     final redeemedPoints = ref.watch(redeemedPointsProvider);
-    final profilePicture = ref.watch(userProfilePictureProvider);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,

@@ -114,7 +114,8 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8.r))),
                       onPressed: () {},
-                      child: CircularProgressIndicator(color: Colors.white)),
+                      child:
+                          const CircularProgressIndicator(color: Colors.white)),
               Gap(30.h),
               Align(
                   alignment: Alignment.bottomCenter,

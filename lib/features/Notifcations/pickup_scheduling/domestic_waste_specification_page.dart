@@ -11,18 +11,18 @@ import 'package:trash_out/widgets/custom_button.dart';
 import 'package:trash_out/widgets/gap.dart';
 import 'package:trash_out/widgets/waste_type_tab.dart';
 
-import '../state/state.dart';
+import '../../../state/state.dart';
 
-class IndustrialWasteSpecificationPage extends ConsumerStatefulWidget {
-  const IndustrialWasteSpecificationPage({super.key});
+class DomesticWasteSpecificationPage extends ConsumerStatefulWidget {
+  const DomesticWasteSpecificationPage({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      _IndustrialWasteSpecificationPageState();
+      _DomesticWasteSpecificationPageState();
 }
 
-class _IndustrialWasteSpecificationPageState
-    extends ConsumerState<IndustrialWasteSpecificationPage> {
+class _DomesticWasteSpecificationPageState
+    extends ConsumerState<DomesticWasteSpecificationPage> {
   List indexes = [];
   List<String> tx() {
     List<String> types = [];
@@ -30,15 +30,24 @@ class _IndustrialWasteSpecificationPageState
     for (final i in indexes) {
       switch (i) {
         case 0:
-          types.add('Manufacturing');
+          types.add('Plastic');
           break;
         case 1:
-          types.add('Hazardous');
+          types.add('Food waste');
           break;
         case 2:
-          types.add('Construction');
+          types.add('Paper');
           break;
         case 3:
+          types.add('Textile');
+          break;
+        case 4:
+          types.add('Glass');
+          break;
+        case 5:
+          types.add('Furniture');
+          break;
+        case 6:
           types.add('E-waste');
           break;
         default:
@@ -51,7 +60,6 @@ class _IndustrialWasteSpecificationPageState
   bool isPicked = false;
 
   List<XFile?>? images;
-
   @override
   Widget build(BuildContext context) {
     var mediaQ = MediaQuery.sizeOf(context);
@@ -65,7 +73,7 @@ class _IndustrialWasteSpecificationPageState
               color: Colors.black,
             )),
         title: const Text(
-          "Industrial Waste",
+          "Domestic Waste",
           style: TextStyle(fontFamily: 'Sen'),
         ),
       ),
@@ -86,7 +94,7 @@ class _IndustrialWasteSpecificationPageState
                     height: mediaQ.height * 0.2 - 50,
                     width: mediaQ.width * 0.7,
                     child: Image.asset(
-                      "assets/images/industry.png",
+                      "assets/images/domestic.png",
                       fit: BoxFit.contain,
                     )),
               ),
@@ -110,8 +118,8 @@ class _IndustrialWasteSpecificationPageState
                         color: (indexes.contains(0))
                             ? KColors.green100
                             : KColors.grey,
-                        icon: "assets/icons/production_icon.png",
-                        label: "Production"),
+                        icon: "assets/icons/plastic.png",
+                        label: "Plastic"),
                   ),
                   GestureDetector(
                     onTap: () {
@@ -125,8 +133,8 @@ class _IndustrialWasteSpecificationPageState
                         color: (indexes.contains(1))
                             ? KColors.green100
                             : KColors.grey,
-                        icon: 'assets/icons/hazardous_icon.png',
-                        label: "Hazardous"),
+                        icon: "assets/icons/organic.png",
+                        label: "Food waste"),
                   ),
                   GestureDetector(
                     onTap: () {
@@ -140,8 +148,8 @@ class _IndustrialWasteSpecificationPageState
                         color: (indexes.contains(2))
                             ? KColors.green100
                             : KColors.grey,
-                        icon: 'assets/icons/construction_icon.png',
-                        label: "Construction"),
+                        icon: "assets/icons/paper_icon.png",
+                        label: "Paper"),
                   ),
                   GestureDetector(
                     onTap: () {
@@ -151,8 +159,53 @@ class _IndustrialWasteSpecificationPageState
                             : indexes.add(3);
                       });
                     },
-                    child: WasteTypeTab(
+                    child: WasteTypeTab1(
                         color: (indexes.contains(3))
+                            ? KColors.green100
+                            : KColors.grey,
+                        icon: "assets/icons/shirt_icon.png",
+                        label: "Textile"),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        (indexes.contains(4))
+                            ? indexes.remove(4)
+                            : indexes.add(4);
+                      });
+                    },
+                    child: WasteTypeTab1(
+                        color: (indexes.contains(4))
+                            ? KColors.green100
+                            : KColors.grey,
+                        icon: "assets/icons/broken_glass.png",
+                        label: "Glass"),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        (indexes.contains(5))
+                            ? indexes.remove(5)
+                            : indexes.add(5);
+                      });
+                    },
+                    child: WasteTypeTab1(
+                        color: (indexes.contains(5))
+                            ? KColors.green100
+                            : KColors.grey,
+                        icon: "assets/icons/wood.png",
+                        label: "Furniture"),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        (indexes.contains(6))
+                            ? indexes.remove(6)
+                            : indexes.add(6);
+                      });
+                    },
+                    child: WasteTypeTab(
+                        color: (indexes.contains(6))
                             ? KColors.green100
                             : KColors.grey,
                         icon: IcoFontIcons.microChip,
